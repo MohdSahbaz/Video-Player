@@ -12,7 +12,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between items-center md:px-10 px-2 py-2 text-white sticky top-0">
+    <div className="flex justify-between items-center md:px-10 px-2 py-2 text-white sticky top-0 z-10">
       <div
         className="flex justify-between items-center gap-1 cursor-pointer"
         onClick={() => navigate("/")}

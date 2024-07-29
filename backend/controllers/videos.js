@@ -13,7 +13,7 @@ const getAllVideo = async (req, res) => {
 // Get a video by id
 const getVideoById = async (req, res) => {
   try {
-    const { id } = req.param();
+    const { id } = req.params;
     const video = await Video.findByPk(id);
     if (video) {
       res.json(video);
@@ -21,7 +21,7 @@ const getVideoById = async (req, res) => {
       res.status(404).json({ error: "Video Not Found" });
     }
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" + error });
   }
 };
 

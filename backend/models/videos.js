@@ -47,9 +47,14 @@ const Video = sequelize.define("Video", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  uploader_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 // // Synchronize the model with the database sequelize(it help to create table)
+// sequelize
 //   .sync({ force: true })
 //   .then(() => {
 //     console.log("Database & tables created!");

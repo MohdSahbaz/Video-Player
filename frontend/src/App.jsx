@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Header from "./components/header/Header";
 import Sidebar from "./components/sidebar/Sidebar";
 import Home from "./components/home/Home";
+import SingleVideo from "./components/Videos/SingleVideo";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: ":videoId",
+        element: <SingleVideo />,
       },
     ],
   },

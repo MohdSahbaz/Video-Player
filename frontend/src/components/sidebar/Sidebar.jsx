@@ -2,8 +2,11 @@ import { Link, Outlet } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <div className="flex md:px-10 px-2 py-5">
-      <div className="flex flex-col w-1/6 gap-6">
+    <div className="flex">
+      <div
+        className="flex flex-col w-1/5 gap-6 md:px-10 sticky top-[60px] px-2 py-5"
+        style={{ height: "calc(100vh - 60px" }}
+      >
         <SideBarLink to={"/"} label={"Home"} />
         <SideBarLink to={"playlist"} label={"Playlist"} />
         <SideBarLink to={"watchlater"} label={"Watch Later"} />

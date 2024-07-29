@@ -1,24 +1,36 @@
+import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 
 import { VideoContext } from "../../context/videos";
 
 const Home = () => {
+  const navigate = useNavigate();
   const { videos, getAllVideos, message } = useContext(VideoContext);
 
   useEffect(() => {
-    getAllVideos();
+    const fetchVideo = async () => {
+      await getAllVideos();
+    };
+    fetchVideo();
   }, []);
 
+  const handleSingleVideo = (videoId) => {
+    navigate(`/${videoId}`);
+  };
+
   return (
-    <div className="text-white md:ml-8 px-4 w-full flex flex-wrap justify-center gap-10">
-      <b>{message}</b>
+    <div className="text-white md:ml-8 px-4 w-full flex flex-wrap justify-center gap-10 py-8">
+      {message && <b>{message}</b>}
       {videos.map((video, index) => {
         const uploadDate = parseISO(video.createdAt);
         const timeAgo = formatDistanceToNow(uploadDate, { addSuffix: true });
-
         return (
-          <div key={index} className="md:w-60">
+          <div
+            key={index}
+            className="md:w-60 cursor-pointer"
+            onClick={() => handleSingleVideo(video.video_id)}
+          >
             <div>
               <img
                 src={video.thumbnail}
@@ -27,9 +39,9 @@ const Home = () => {
               />
             </div>
             <div>
-              <b>{video.title}</b>
-              <p>{video.uploader_id}</p>
-              <p>
+              <p>{video.title}</p>
+              <p className="text-sm">@{video.uploader_name}</p>
+              <p className="text-xs">
                 {`${video.views} views`} {" - "} {timeAgo}
               </p>
             </div>

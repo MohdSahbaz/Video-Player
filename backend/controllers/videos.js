@@ -1,10 +1,13 @@
+const { where } = require("sequelize");
 const Video = require("../models/videos");
 
 // Get All Videos
 const getAllVideo = async (req, res) => {
   try {
-    const video = await Video.findAll();
-    res.status(200).json(video);
+    const videos = await Video.findAll();
+    // Shuffle the array of videos
+    const shuffledVideos = videos.sort(() => Math.random() - 0.5);
+    res.status(200).json(shuffledVideos);
   } catch (error) {
     res.status(500).json({ error: `Internal Server Error ${error}` });
   }
@@ -65,10 +68,26 @@ const deleteVideo = async (req, res) => {
   }
 };
 
+// Trending Videos
+const trendingVideos = async (req, res) => {
+  try {
+    const videos = await Video.findAll({
+      order: [
+        ["views", "DESC"],
+        ["likes", "DESC"],
+      ],
+    });
+
+    res.status(200).json(videos);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 module.exports = {
   getAllVideo,
   getVideoById,
   createVideo,
   updateVideo,
   deleteVideo,
+  trendingVideos,
 };

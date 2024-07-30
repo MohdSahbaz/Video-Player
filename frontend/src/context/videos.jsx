@@ -6,6 +6,7 @@ const VideoContext = createContext();
 const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
   const [singleVideo, setSingleVideo] = useState({});
+  const [trendingVideos, setTrendingVideos] = useState([]);
   const [message, setMessage] = useState(null);
 
   const getAllVideos = async () => {
@@ -36,6 +37,19 @@ const VideoProvider = ({ children }) => {
     }
   };
 
+  const getTrendingVideos = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/trending`);
+      if (response.data.length === 0) {
+        setMessage("Zero Videos");
+      } else {
+        setTrendingVideos(response.data);
+      }
+    } catch (error) {
+      setMessage(`Error while feching videos`);
+    }
+  };
+
   return (
     <VideoContext.Provider
       value={{
@@ -45,6 +59,8 @@ const VideoProvider = ({ children }) => {
         message,
         getVideoById,
         singleVideo,
+        trendingVideos,
+        getTrendingVideos,
       }}
     >
       {children}

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 
-import { VideoContext } from "../../context/videos";
+import { VideoContext } from "../../context/videosContext";
 
 const Trending = () => {
   const navigate = useNavigate();

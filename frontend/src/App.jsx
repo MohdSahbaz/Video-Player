@@ -6,28 +6,38 @@ import Sidebar from "./components/sidebar/Sidebar";
 import Home from "./components/home/Home";
 import SingleVideo from "./components/Videos/SingleVideo";
 import Trending from "./components/Videos/Trending";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <>
-        <Header />
-        <Sidebar />
-      </>
-    ),
+    element: <Header />,
     children: [
       {
-        path: "",
-        element: <Home />,
+        element: <Sidebar />,
+        children: [
+          {
+            path: "",
+            element: <Home />,
+          },
+          {
+            path: "watch",
+            element: <SingleVideo />,
+          },
+          {
+            path: "trending",
+            element: <Trending />,
+          },
+        ],
       },
       {
-        path: ":videoId",
-        element: <SingleVideo />,
+        path: "login",
+        element: <Login />,
       },
       {
-        path: "trending",
-        element: <Trending />,
+        path: "register",
+        element: <Register />,
       },
     ],
   },

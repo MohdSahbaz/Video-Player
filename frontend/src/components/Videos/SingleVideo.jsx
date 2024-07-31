@@ -1,29 +1,32 @@
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 
-//Icons
+// Icons
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { MdOutlinePlaylistAdd, MdOutlineWatchLater } from "react-icons/md";
 
 import { useContext, useEffect } from "react";
-import { VideoContext } from "../../context/videos";
+import { VideoContext } from "../../context/videosContext";
 
 export default function SingleVideo() {
-  const { videoId } = useParams();
+  const [searchParams] = useSearchParams();
+  const videoId = searchParams.get("video");
   const { singleVideo, getVideoById, message } = useContext(VideoContext);
 
-  // get the video
+  // Get the video
   useEffect(() => {
     const fetchVideo = async () => {
-      await getVideoById(videoId);
-      console.log(singleVideo);
+      if (videoId) {
+        await getVideoById(videoId);
+      }
     };
     fetchVideo();
   }, []);
 
   // Set the time
-  const uploadDate = singleVideo.createdAt
+  const uploadDate = singleVideo?.createdAt
     ? parseISO(singleVideo.createdAt)
     : new Date();
   const timeAgo = formatDistanceToNow(uploadDate, { addSuffix: true });
@@ -32,29 +35,32 @@ export default function SingleVideo() {
     <div className="text-white md:ml-8 px-4 w-full flex flex-wrap flex-col py-5 md:py-8 items-center gap-10">
       <div className="flex flex-col gap-1 w-full max-w-2xl">
         <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-          <ReactPlayer
-            url={singleVideo.url}
-            controls
-            width="100%"
-            height="100%"
-            style={{ position: "absolute", top: "0", left: "0" }}
-          />
+          {!singleVideo && <p>{message}</p>}
+          {singleVideo && (
+            <ReactPlayer
+              url={singleVideo.url}
+              controls
+              width="100%"
+              height="100%"
+              style={{ position: "absolute", top: "0", left: "0" }}
+            />
+          )}
         </div>
-        <b className="">{singleVideo.title}</b>
+        <b>{singleVideo?.title}</b>
         <div className="flex flex-wrap">
-          <b className="md:mr-16 mr-4">@{singleVideo.uploader_name}</b>
+          <b className="md:mr-16 mr-4">@{singleVideo?.uploader_name}</b>
           <b className="flex justify-center gap-2 items-center rounded-l-lg border-r bg-slate-700/[0.5] hover:bg-slate-700/[1] px-2 py-1 cursor-pointer">
             <BiLike className="bg-transparent text-lg" />
-            {singleVideo.likes}
+            {singleVideo?.likes}
           </b>
           <b className="flex justify-center gap-2 items-center rounded-r-lg border-l bg-slate-700/[0.5] hover:bg-slate-700/[1] px-2 py-1 cursor-pointer">
             <BiDislike className="bg-transparent text-lg" />
-            {singleVideo.dislikes}
+            {singleVideo?.dislikes}
           </b>
         </div>
         <div className="flex flex-wrap">
           <b className="flex justify-center items-center bg-slate-700/[0.5] hover:bg-slate-700/[1] cursor-pointer gap-2 px-4 py-1 border-r rounded-l-md">
-            <MdOutlinePlaylistAdd className="bg-transparent md:text-2xl text-xl" />{" "}
+            <MdOutlinePlaylistAdd className="bg-transparent md:text-2xl text-xl" />
             Playlist
           </b>
           <b className="flex justify-center items-center bg-slate-700/[0.5] hover:bg-slate-700/[1] cursor-pointer gap-2 px-4 py-1 border-l rounded-r-md">
@@ -64,9 +70,9 @@ export default function SingleVideo() {
         </div>
         <div>
           <p>
-            {singleVideo.views} views {timeAgo}
+            {singleVideo?.views} views {timeAgo}
           </p>
-          <p>{singleVideo.description}</p>
+          <p>{singleVideo?.description}</p>
         </div>
       </div>
     </div>

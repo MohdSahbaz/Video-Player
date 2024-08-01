@@ -3,6 +3,7 @@ const cors = require("cors");
 const app = express();
 const connectDB = require("./config/connectDB");
 const videoRoutes = require("./routes/videos");
+const userRoutes = require("./routes/userAuth");
 
 require("dotenv").config();
 
@@ -18,7 +19,11 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+// Video route
 app.use("/api", videoRoutes);
+
+// User auth route
+app.use("/api", userRoutes);
 
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => {

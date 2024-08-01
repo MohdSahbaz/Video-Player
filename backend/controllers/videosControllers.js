@@ -1,5 +1,4 @@
-const { where } = require("sequelize");
-const Video = require("../models/videos");
+const Video = require("../models/videosModel");
 
 // Get All Videos
 const getAllVideo = async (req, res) => {
@@ -18,11 +17,10 @@ const getVideoById = async (req, res) => {
   try {
     const { id } = req.params;
     const video = await Video.findByPk(id);
-    if (video) {
-      res.json(video);
-    } else {
-      res.status(404).json({ error: "Video Not Found" });
+    if (!video) {
+      return res.status(404).json({ error: "Video Not Found" });
     }
+    res.status(200).json(video);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" + error });
   }

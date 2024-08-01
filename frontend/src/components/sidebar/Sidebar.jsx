@@ -4,7 +4,7 @@ const Sidebar = () => {
   return (
     <div className="flex">
       <div
-        className="flex flex-col w-1/5 gap-6 md:px-10 sticky top-[60px] px-2 py-5"
+        className="flex flex-col w-1/5 gap-6 md:px-10 sticky top-[60px] px-2 py-5 overflow-y-auto overflow-x-hidden"
         style={{ height: "calc(100vh - 60px" }}
       >
         <SideBarLink to={"/"} label={"Home"} />

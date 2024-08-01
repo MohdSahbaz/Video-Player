@@ -6,7 +6,7 @@ const {
   updateVideo,
   deleteVideo,
   trendingVideos,
-} = require("../controllers/videos");
+} = require("../controllers/videosControllers");
 const router = express.Router();
 
 router.get("/videos", getAllVideo);

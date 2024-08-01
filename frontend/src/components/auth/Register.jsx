@@ -16,7 +16,7 @@ const Register = () => {
     <div className="flex flex-col justify-center items-center pt-6">
       <form
         onSubmit={handleLogin}
-        className="flex flex-col justify-center px-8 py-5 rounded shadow-md shadow-slate-950 w-80"
+        className="flex flex-col justify-center px-8 py-5 rounded shadow hover:shadow-md shadow-slate-950 hover:shadow-gray-600 w-80"
       >
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
         <label htmlFor="name" className="mb-2 font-semibold">

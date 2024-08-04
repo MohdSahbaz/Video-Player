@@ -8,6 +8,7 @@ const Sidebar = () => {
         style={{ height: "calc(100vh - 60px" }}
       >
         <SideBarLink to={"/"} label={"Home"} />
+        <SideBarLink to={"/myvideo"} label={"My Video"} />
         <SideBarLink to={"playlist"} label={"Playlist"} />
         <SideBarLink to={"watchlater"} label={"Watch Later"} />
         <SideBarLink to={"following"} label={"Following"} />

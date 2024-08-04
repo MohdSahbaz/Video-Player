@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault();
     try {
       setError(null);
-      login();
+      await login();
       navigate("/profile");
     } catch (error) {
       setError(error);
@@ -26,7 +26,7 @@ const Login = () => {
         className="flex flex-col justify-center px-8 py-5 rounded shadow shadow-slate-950 hover:shadow-gray-600 hover:shadow-md transition-all duration-300 ease-in-out transform md:w-80 w-2/3"
       >
         <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
-        <label htmlFor="email" className="mb-2 font-semibold">
+        <label htmlFor="email" className="mb-2 font-semibold text-gray-600">
           Email
         </label>
         <input
@@ -39,7 +39,7 @@ const Login = () => {
           required
           onChange={(e) => setEmail(e.target.value)}
         />
-        <label htmlFor="password" className="mb-2 font-semibold">
+        <label htmlFor="password" className="mb-2 font-semibold text-gray-600">
           Password
         </label>
         <input
@@ -53,9 +53,14 @@ const Login = () => {
         />
         <p
           onClick={() => setShowPassword(!showPassword)}
-          className="mb-6 cursor-pointer"
+          className="mb-2 cursor-pointer"
         >
           {showPassword ? "Hide Password" : "Show Password"}
+        </p>
+        <p className="mb-4 flex justify-end">
+          <Link to="/forgot-password" className="text-blue-500 hover:underline">
+            Forgot Password?
+          </Link>
         </p>
         {error && <p className="text-red-500 mb-6">{error}</p>}
         <button
@@ -71,11 +76,6 @@ const Login = () => {
           Create one
         </Link>
         .
-      </p>
-      <p className="mt-2">
-        <Link to="/forgot-password" className="text-blue-500 hover:underline">
-          Forgot Password?
-        </Link>
       </p>
     </div>
   );

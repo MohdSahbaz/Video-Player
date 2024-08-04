@@ -11,6 +11,15 @@ const Header = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
+  const handleAuth = () => {
+    const checkLogin = localStorage.getItem("authToken");
+    if (checkLogin) {
+      navigate("/profile");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <>
       <div className="flex justify-between items-center md:px-10 px-2 py-2 text-white sticky top-0 z-10">
@@ -41,7 +50,7 @@ const Header = () => {
           <RiVideoAddLine className="text-xl cursor-pointer" />
           <FaUserCircle
             className="text-2xl cursor-pointer"
-            onClick={() => navigate("/login")}
+            onClick={handleAuth}
           />
         </div>
       </div>

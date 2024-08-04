@@ -1,16 +1,27 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import { lazy, Suspense } from "react";
 
 // Components
 import Header from "./components/header/Header";
 import Sidebar from "./components/sidebar/Sidebar";
-import Home from "./components/home/Home";
+const Home = lazy(() => import("./components/home/Home"));
+const Trending = lazy(() => import("./components/Videos/Trending"));
 import SingleVideo from "./components/Videos/SingleVideo";
-import Trending from "./components/Videos/Trending";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Profile from "./components/Profile/Profile";
 
-const checkLogin = localStorage.getItem("authToken");
+// Authentication check
+const checkLogin = () => !!localStorage.getItem("authToken");
+
+// Protected route components
+const ProtectedRoute = ({ element }) => {
+  return checkLogin() ? element : <Navigate to={"/login"} />;
+};
 
 const router = createBrowserRouter([
   {
@@ -22,7 +33,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <Home />,
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Home />
+              </Suspense>
+            ),
           },
           {
             path: "watch",
@@ -30,7 +45,11 @@ const router = createBrowserRouter([
           },
           {
             path: "trending",
-            element: <Trending />,
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Trending />
+              </Suspense>
+            ),
           },
         ],
       },
@@ -44,7 +63,7 @@ const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: checkLogin ? <Profile /> : <Login />,
+        element: <ProtectedRoute element={<Profile />} />,
       },
     ],
   },

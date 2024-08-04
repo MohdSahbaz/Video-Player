@@ -6,14 +6,18 @@ require("dotenv").config();
 // Register
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
   try {
-    const user = await User.findOne({ where: { email } });
-    if (user) {
-      return res.status(409).json({ message: "User already exist" });
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" });
     }
 
-    const userName = await User.findOne({ where: { name } });
-    if (userName) {
+    const existingUserName = await User.findOne({ where: { name } });
+    if (existingUserName) {
       return res
         .status(409)
         .json({ message: "Username already taken, please choose another" });
@@ -23,7 +27,7 @@ const registerUser = async (req, res) => {
     const saltRounds = parseInt(process.env.SALT_ROUNDS);
     const hashPassword = await bcrypt.hash(password, saltRounds);
 
-    // create new user
+    // Create new user
     const newUser = await User.create({
       name,
       email,
@@ -42,17 +46,22 @@ const registerUser = async (req, res) => {
 // Login
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  try {
-    // Find user by email
-    const user = await User.findOne({ where: { email } });
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
 
-    // Check password
-    const isMatched = await bcrypt.compare(password, user.password);
-    if (!user || !isMatched) {
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Generate jwt token
+    const isMatched = await bcrypt.compare(password, user.password);
+    if (!isMatched) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Generate JWT token
     const token = jwt.sign({ userId: user.user_id }, process.env.USER_TOKEN, {
       expiresIn: "1h",
     });
@@ -65,18 +74,20 @@ const loginUser = async (req, res) => {
 
 // User profile data
 const profile = async (req, res) => {
-  const token = req.header("auth-Token");
-  if (!token) return res.status(401).json({ message: "Please login" });
+  const token = req.header("auth-token");
+  if (!token) {
+    return res.status(401).json({ message: "Please login" });
+  }
 
   try {
-    const decode = jwt.verify(token, process.env.USER_TOKEN);
-    const user = await User.findByPk(decode.userId);
+    const decoded = jwt.verify(token, process.env.USER_TOKEN);
+    const user = await User.findByPk(decoded.userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
     res.json(user);
   } catch (error) {
-    res.status(401).json({ message: "Token is not valid " + error });
+    res.status(401).json({ message: "Token is not valid" });
   }
 };
 

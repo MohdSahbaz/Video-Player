@@ -53,14 +53,13 @@ const Video = sequelize.define("Video", {
   },
 });
 
-// // Synchronize the model with the database sequelize(it help to create table)
-// sequelize
-//   .sync({ force: true })
+// // Synchronize only the Video model with the database
+// Video.sync()
 //   .then(() => {
-//     console.log("Database & tables created!");
+//     console.log("Video table created!");
 //   })
 //   .catch((error) => {
-//     console.error("Error creating database tables:", error);
+//     console.error("Error creating Video table:", error);
 //   });
 
 module.exports = Video;

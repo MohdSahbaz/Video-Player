@@ -1,15 +1,15 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/auth/authContext";
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, setName, setEmail, setPassword, error } =
+    useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
+    register();
   };
 
   return (
@@ -20,7 +20,7 @@ const Register = () => {
       >
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
         <label htmlFor="name" className="mb-2 font-semibold">
-          Name
+          User Name
         </label>
         <input
           type="text"
@@ -28,8 +28,7 @@ const Register = () => {
           id="name"
           autoFocus
           className="mb-4 p-2 border border-gray-300 rounded"
-          placeholder="Enter your name"
-          value={name}
+          placeholder="Enter your user name"
           required
           onChange={(e) => setName(e.target.value)}
         />
@@ -42,7 +41,6 @@ const Register = () => {
           id="email"
           className="mb-4 p-2 border border-gray-300 rounded"
           placeholder="Enter your email"
-          value={email}
           required
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -57,7 +55,6 @@ const Register = () => {
           required
           className="mb-1 p-2 border border-gray-300 rounded"
           placeholder="Enter your password"
-          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <p

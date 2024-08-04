@@ -1,15 +1,22 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/auth/authContext";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login, setEmail, setPassword, error, setError } =
+    useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Hello World");
+    try {
+      setError(null);
+      login();
+      navigate("/profile");
+    } catch (error) {
+      setError(error);
+    }
   };
 
   return (
@@ -29,7 +36,6 @@ const Login = () => {
           autoFocus
           className="mb-4 p-2 border border-gray-300 rounded"
           placeholder="Enter your email"
-          value={email}
           required
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -43,7 +49,6 @@ const Login = () => {
           required
           className="mb-1 p-2 border border-gray-300 rounded"
           placeholder="Enter your password"
-          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <p

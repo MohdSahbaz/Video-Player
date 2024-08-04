@@ -10,7 +10,8 @@ const Sidebar = () => {
         <SideBarLink to={"/"} label={"Home"} />
         <SideBarLink to={"playlist"} label={"Playlist"} />
         <SideBarLink to={"watchlater"} label={"Watch Later"} />
-        <SideBarLink to={"liked"} label={"Liked Video"} />
+        <SideBarLink to={"following"} label={"Following"} />
+        <SideBarLink to={"liked"} label={"Liked Videos"} />
         <SideBarLink to={"trending"} label={"Trending"} />
       </div>
       <Outlet />

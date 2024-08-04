@@ -8,6 +8,9 @@ import SingleVideo from "./components/Videos/SingleVideo";
 import Trending from "./components/Videos/Trending";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import Profile from "./components/Profile/Profile";
+
+const checkLogin = localStorage.getItem("authToken");
 
 const router = createBrowserRouter([
   {
@@ -38,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+      {
+        path: "profile",
+        element: checkLogin ? <Profile /> : <Login />,
       },
     ],
   },

@@ -14,6 +14,7 @@ import SingleVideo from "./components/Videos/SingleVideo";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Profile from "./components/Profile/Profile";
+import EditProfile from "./components/Profile/EditProfile";
 
 // Authentication check
 const checkLogin = () => !!localStorage.getItem("authToken");
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <ProtectedRoute element={<Profile />} />,
+      },
+      {
+        path: "edit-profile",
+        element: <ProtectedRoute element={<EditProfile />} />,
       },
     ],
   },

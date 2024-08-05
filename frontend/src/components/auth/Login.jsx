@@ -27,7 +27,7 @@ const Login = () => {
       >
         <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
         <label htmlFor="email" className="mb-2 font-semibold text-gray-600">
-          Email
+          Email<span className="text-red-500">*</span>
         </label>
         <input
           type="email"
@@ -40,7 +40,7 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <label htmlFor="password" className="mb-2 font-semibold text-gray-600">
-          Password
+          Password<span className="text-red-500">*</span>
         </label>
         <input
           type={showPassword ? "text" : "password"}

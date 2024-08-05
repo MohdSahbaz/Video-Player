@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth/authContext";
 
 const Register = () => {
-  const { register, setName, setEmail, setPassword, error } =
+  const { register, setName, setBio, setEmail, setPassword, error } =
     useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const Register = () => {
           className="mb-4 opacity-50 cursor-pointer"
         />
         <label htmlFor="name" className="mb-2 font-semibold text-gray-600">
-          User Name
+          User Name<span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -46,8 +46,19 @@ const Register = () => {
           required
           onChange={(e) => setName(e.target.value)}
         />
+        <label htmlFor="bio" className="mb-2 font-semibold text-gray-600">
+          Bio
+        </label>
+        <input
+          type="text"
+          name="bio"
+          id="bio"
+          className="mb-4 p-2 border border-gray-300 rounded"
+          placeholder="Enter bio"
+          onChange={(e) => setBio(e.target.value)}
+        />
         <label htmlFor="email" className="mb-2 font-semibold text-gray-600">
-          Email
+          Email<span className="text-red-500">*</span>
         </label>
         <input
           type="email"
@@ -59,7 +70,7 @@ const Register = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <label htmlFor="password" className="mb-2 font-semibold text-gray-600">
-          Password
+          Password<span className="text-red-500">*</span>
         </label>
         <input
           type={showPassword ? "text" : "password"}

@@ -28,7 +28,7 @@ const Header = () => {
           onClick={() => navigate("/")}
         >
           <GoVideo className="text-2xl text-violet-600" />
-          <b>SolKer</b>
+          <b className="fonti">SolKer</b>
         </div>
         <div className="flex items-center w-1/3 h-8 border border-violet-400 hover:border-violet-600 transition-all rounded-2xl">
           <input

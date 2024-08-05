@@ -6,6 +6,7 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState({});
@@ -16,6 +17,7 @@ const AuthProvider = ({ children }) => {
     try {
       await axios.post(`http://localhost:3000/api/register`, {
         name,
+        bio,
         email,
         password,
       });
@@ -42,7 +44,6 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // Profile
   const profile = async () => {
     setError(null);
     const token = localStorage.getItem("authToken");
@@ -60,17 +61,40 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateProfile = async (updatedUser) => {
+    setError(null);
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      try {
+        const response = await axios.put(
+          `http://localhost:3000/api/profile`,
+          updatedUser,
+          {
+            headers: { "auth-Token": token },
+          }
+        );
+        setUser(response.data);
+      } catch (error) {
+        setError(
+          `${error.response ? error.response.data.message : error.message}`
+        );
+      }
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
         register,
         setName,
+        setBio,
         setEmail,
         setPassword,
         error,
         setError,
         login,
         profile,
+        updateProfile,
         user,
       }}
     >

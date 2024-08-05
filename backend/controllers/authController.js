@@ -5,7 +5,7 @@ require("dotenv").config();
 
 // Register
 const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, bio, email, password } = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -30,6 +30,7 @@ const registerUser = async (req, res) => {
     // Create new user
     const newUser = await User.create({
       name,
+      bio,
       email,
       password: hashPassword,
     });
@@ -91,4 +92,27 @@ const profile = async (req, res) => {
   }
 };
 
-module.exports = { loginUser, registerUser, profile };
+// Update profile
+const updateProfile = async (req, res) => {
+  try {
+    const { name, bio } = req.body;
+    const user = await User.findOne({ where: { name } });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // Update user details
+    user.name = name || user.name;
+    user.bio = bio || user.bio;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: { name: user.name, bio: user.bio },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { loginUser, registerUser, profile, updateProfile };

@@ -61,19 +61,19 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateProfile = async (updatedUser) => {
+  const updateProfile = async (newName, bio) => {
     setError(null);
     const token = localStorage.getItem("authToken");
     if (token) {
       try {
         const response = await axios.put(
-          `http://localhost:3000/api/profile`,
-          updatedUser,
+          `http://localhost:3000/api/profile/${user.name}`,
+          { newName, bio },
           {
             headers: { "auth-Token": token },
           }
         );
-        setUser(response.data);
+        setUser(response.data.user);
       } catch (error) {
         setError(
           `${error.response ? error.response.data.message : error.message}`

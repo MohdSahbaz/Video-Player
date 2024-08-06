@@ -4,12 +4,18 @@ import { RiVideoAddLine } from "react-icons/ri";
 import { FaUserCircle, FaSearch } from "react-icons/fa";
 
 // hooks
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
+import { AuthContext } from "../../context/auth/authContext";
 
 const Header = () => {
+  const { profile, user } = useContext(AuthContext);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    profile();
+  }, []);
 
   const handleAuth = () => {
     const checkLogin = localStorage.getItem("authToken");
@@ -28,7 +34,7 @@ const Header = () => {
           onClick={() => navigate("/")}
         >
           <GoVideo className="text-2xl text-violet-600" />
-          <b className="fonti">SolKer</b>
+          <b>SolKer</b>
         </div>
         <div className="flex items-center w-1/3 h-8 border border-violet-400 hover:border-violet-600 transition-all rounded-2xl">
           <input
@@ -47,7 +53,10 @@ const Header = () => {
           </button>
         </div>
         <div className="flex justify-between items-center gap-5">
-          <RiVideoAddLine className="text-xl cursor-pointer" />
+          <RiVideoAddLine
+            onClick={() => navigate("/upload-video")}
+            className="text-xl cursor-pointer"
+          />
           <FaUserCircle
             className="text-2xl cursor-pointer"
             onClick={handleAuth}

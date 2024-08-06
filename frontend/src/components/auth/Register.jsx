@@ -39,6 +39,7 @@ const Register = () => {
         <input
           type="text"
           name="name"
+          maxLength={30}
           id="name"
           autoFocus
           className="mb-4 p-2 border border-gray-300 rounded"
@@ -53,6 +54,7 @@ const Register = () => {
           type="text"
           name="bio"
           id="bio"
+          maxLength={100}
           className="mb-4 p-2 border border-gray-300 rounded"
           placeholder="Enter bio"
           onChange={(e) => setBio(e.target.value)}

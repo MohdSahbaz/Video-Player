@@ -1,5 +1,6 @@
 const express = require("express");
 
+// Auth and profile
 const {
   registerUser,
   loginUser,
@@ -9,9 +10,12 @@ const {
 
 const router = express.Router();
 
+// Auth routes
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+
+// Profile Routes
 router.get("/profile", profile);
-router.put("/profile", updateProfile);
+router.put("/profile/:name", updateProfile);
 
 module.exports = router;

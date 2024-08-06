@@ -95,13 +95,14 @@ const profile = async (req, res) => {
 // Update profile
 const updateProfile = async (req, res) => {
   try {
-    const { name, bio } = req.body;
+    const { name } = req.params;
+    const { newName, bio } = req.body;
     const user = await User.findOne({ where: { name } });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    // Update user details
-    user.name = name || user.name;
+
+    user.name = newName || user.name;
     user.bio = bio || user.bio;
 
     await user.save();
@@ -115,4 +116,9 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { loginUser, registerUser, profile, updateProfile };
+module.exports = {
+  loginUser,
+  registerUser,
+  profile,
+  updateProfile,
+};

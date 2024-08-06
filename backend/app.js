@@ -5,6 +5,7 @@ const app = express();
 const connectDB = require("./config/connectDB");
 const videoRoutes = require("./routes/videos");
 const userRoutes = require("./routes/userAuth");
+const passRoute = require("./routes/forgetPassword");
 
 require("dotenv").config();
 
@@ -40,6 +41,9 @@ app.use("/api", videoRoutes);
 
 // User auth route
 app.use("/api", userRoutes);
+
+// Forget or change password route
+app.use("/api/password", passRoute);
 
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => {

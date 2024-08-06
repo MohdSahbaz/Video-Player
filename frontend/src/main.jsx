@@ -6,12 +6,15 @@ import "./index.css";
 // Context Providers
 import { VideoProvider } from "./context/videosContext.jsx";
 import { AuthProvider } from "./context/auth/authContext.jsx";
+import { ForgetPasswordProvider } from "./context/auth/forgetPassword.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <VideoProvider>
       <AuthProvider>
-        <App />
+        <ForgetPasswordProvider>
+          <App />
+        </ForgetPasswordProvider>
       </AuthProvider>
     </VideoProvider>
   </React.StrictMode>

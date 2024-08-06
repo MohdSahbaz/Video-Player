@@ -16,6 +16,8 @@ import Register from "./components/auth/Register";
 import Profile from "./components/Profile/Profile";
 import EditProfile from "./components/Profile/EditProfile";
 import UploadVideo from "./components/Videos/UploadVideo";
+import ForgetPassword from "./components/auth/ForgetPassword";
+import ChangePassword from "./components/auth/ChangePassword";
 
 // Authentication check
 const checkLogin = () => !!localStorage.getItem("authToken");
@@ -64,6 +66,14 @@ const router = createBrowserRouter([
         element: <Register />,
       },
       {
+        path: "forgot-password",
+        element: <ForgetPassword />,
+      },
+      {
+        path: "change-password",
+        element: <ChangePassword />,
+      },
+      {
         path: "profile",
         element: <ProtectedRoute element={<Profile />} />,
       },
@@ -73,7 +83,7 @@ const router = createBrowserRouter([
       },
       {
         path: "upload-video",
-        element: <ProtectedRoute element={<UploadVideo />} />,  
+        element: <ProtectedRoute element={<UploadVideo />} />,
       },
     ],
   },

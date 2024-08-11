@@ -66,7 +66,6 @@ const loginUser = async (req, res) => {
     const token = jwt.sign({ userId: user.user_id }, process.env.USER_TOKEN, {
       expiresIn: "1h",
     });
-
     res.status(200).json({ token });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
@@ -86,7 +85,7 @@ const profile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json(user);
+    res.status(200).json(user);
   } catch (error) {
     res.status(401).json({ message: "Token is not valid" });
   }

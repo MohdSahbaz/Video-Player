@@ -1,3 +1,4 @@
+const { json } = require("body-parser");
 const Video = require("../models/videosModel");
 
 // Get All Videos
@@ -81,6 +82,24 @@ const trendingVideos = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+const getVideoByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required" });
+  }
+
+  try {
+    const userVideos = await Video.findAll({
+      where: { uploader_id: userId },
+    });
+    res.status(200).json(userVideos);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   getAllVideo,
   getVideoById,
@@ -88,4 +107,5 @@ module.exports = {
   updateVideo,
   deleteVideo,
   trendingVideos,
+  getVideoByUserId,
 };

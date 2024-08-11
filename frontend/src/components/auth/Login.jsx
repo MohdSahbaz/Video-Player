@@ -34,7 +34,7 @@ const Login = () => {
           name="email"
           id="email"
           autoFocus
-          className="mb-4 p-2 border border-gray-300 rounded"
+          className="mb-4 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter your email"
           required
           onChange={(e) => setEmail(e.target.value)}
@@ -47,7 +47,7 @@ const Login = () => {
           name="password"
           id="password"
           required
-          className="mb-1 p-2 border border-gray-300 rounded"
+          className="mb-1 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter your password"
           onChange={(e) => setPassword(e.target.value)}
         />

@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { storage } from "../../firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const UploadVideo = () => {
   const videoInputRef = useRef(null);
@@ -19,22 +21,46 @@ const UploadVideo = () => {
   const handleVideoChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setVideo(reader.result);
-      };
-      reader.readAsDataURL(file);
+      const storageRef = ref(storage, `videos/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Handle progress if needed
+        },
+        (error) => {
+          console.error("Upload failed:", error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setVideo(downloadURL);
+          });
+        }
+      );
     }
   };
 
   const handleThumbnailChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setThumbnail(reader.result);
-      };
-      reader.readAsDataURL(file);
+      const storageRef = ref(storage, `thumbnails/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Handle progress if needed
+        },
+        (error) => {
+          console.error("Upload failed:", error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setThumbnail(downloadURL);
+          });
+        }
+      );
     }
   };
 
@@ -97,19 +123,19 @@ const UploadVideo = () => {
             value={title}
             required
             onChange={(e) => setTitle(e.target.value)}
-            className="border p-2 rounded w-full mb-4"
+            className="border p-2 rounded w-full mb-4 bg-transparent"
             placeholder="Enter video title"
           />
           <label className="mb-2 font-medium">Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="border p-2 rounded w-full h-24 resize-none"
+            className="border p-2 rounded w-full h-24 resize-none bg-transparent"
             placeholder="Enter video description"
           />
         </div>
       </div>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+      <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4">
         Upload
       </button>
     </div>

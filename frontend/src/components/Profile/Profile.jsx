@@ -49,7 +49,7 @@ const Profile = () => {
               </button>
               <button
                 className="px-4 py-2 bg-violet-500 text-white rounded-md shadow hover:bg-violet-600"
-                onClick={() => navigate("/myvideos")}
+                onClick={() => navigate("/myvideo")}
               >
                 {user.videos} Videos
               </button>

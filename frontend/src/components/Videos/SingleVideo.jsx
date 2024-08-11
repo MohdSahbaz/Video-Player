@@ -1,39 +1,48 @@
-// import { useParams } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
-
-// Icons
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { MdOutlinePlaylistAdd, MdOutlineWatchLater } from "react-icons/md";
-
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { VideoContext } from "../../context/videosContext";
 
 export default function SingleVideo() {
   const [searchParams] = useSearchParams();
   const videoId = searchParams.get("video");
-  const { singleVideo, getVideoById, message } = useContext(VideoContext);
+  const { singleVideo, getVideoById, message, formatViews } = useContext(VideoContext);
+  const [loading, setLoading] = useState(true);
 
   // Get the video
   useEffect(() => {
     const fetchVideo = async () => {
       if (videoId) {
-        await getVideoById(videoId);
+        try {
+          await getVideoById(videoId);
+        } catch (error) {
+          console.error("Error fetching video:", error);
+        } finally {
+          setLoading(false);
+        }
       }
     };
     fetchVideo();
-  }, []);
+  }, [videoId, getVideoById]);
 
   // Set the time
-  const uploadDate = singleVideo?.createdAt
-    ? parseISO(singleVideo.createdAt)
-    : new Date();
+  const uploadDate = singleVideo?.createdAt ? parseISO(singleVideo.createdAt) : new Date();
   const timeAgo = formatDistanceToNow(uploadDate, { addSuffix: true });
+  const formattedViews = formatViews(singleVideo?.views || 0); // Handle undefined views
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-16 h-16 border-4 border-t-4 border-violet-500 border-solid rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="text-white md:ml-8 px-4 w-full flex flex-wrap flex-col py-5 md:py-8 items-center gap-10">
-      {message && <p>{message}</p>}
+    <div className="text-white md:ml-8 px-4 w-screen flex flex-wrap flex-col py-5 md:py-8 items-center gap-10">
       {singleVideo && singleVideo.url ? (
         <div className="flex flex-col gap-1 w-full max-w-2xl">
           <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
@@ -76,13 +85,13 @@ export default function SingleVideo() {
           </div>
           <div>
             <p>
-              {singleVideo.views} views {timeAgo}
+              {formattedViews} views {timeAgo}
             </p>
             <p>{singleVideo.description}</p>
           </div>
         </div>
       ) : (
-        <p>Loading..</p>
+        <p>{message}</p>
       )}
     </div>
   );

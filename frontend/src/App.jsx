@@ -7,7 +7,6 @@ import { lazy, Suspense } from "react";
 
 // Components
 import Header from "./components/header/Header";
-import Sidebar from "./components/sidebar/Sidebar";
 const Home = lazy(() => import("./components/home/Home"));
 const Trending = lazy(() => import("./components/Videos/Trending"));
 import SingleVideo from "./components/Videos/SingleVideo";
@@ -18,6 +17,7 @@ import EditProfile from "./components/Profile/EditProfile";
 import UploadVideo from "./components/Videos/UploadVideo";
 import ForgetPassword from "./components/auth/ForgetPassword";
 import ChangePassword from "./components/auth/ChangePassword";
+import UserVideos from "./components/Videos/UserVideos";
 
 // Authentication check
 const checkLogin = () => !!localStorage.getItem("authToken");
@@ -33,29 +33,24 @@ const router = createBrowserRouter([
     element: <Header />,
     children: [
       {
-        element: <Sidebar />,
-        children: [
-          {
-            path: "",
-            element: (
-              <Suspense fallback={<div>Loading...</div>}>
-                <Home />
-              </Suspense>
-            ),
-          },
-          {
-            path: "watch",
-            element: <SingleVideo />,
-          },
-          {
-            path: "trending",
-            element: (
-              <Suspense fallback={<div>Loading...</div>}>
-                <Trending />
-              </Suspense>
-            ),
-          },
-        ],
+        path: "",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: "trending",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Trending />
+          </Suspense>
+        ),
+      },
+      {
+        path: "watch",
+        element: <SingleVideo />,
       },
       {
         path: "login",
@@ -84,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: "upload-video",
         element: <ProtectedRoute element={<UploadVideo />} />,
+      },
+      {
+        path: "myvideo",
+        element: <ProtectedRoute element={<UserVideos />} />,
       },
     ],
   },

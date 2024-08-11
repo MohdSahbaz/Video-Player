@@ -42,7 +42,7 @@ const Register = () => {
           maxLength={30}
           id="name"
           autoFocus
-          className="mb-4 p-2 border border-gray-300 rounded"
+          className="mb-4 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter your user name"
           required
           onChange={(e) => setName(e.target.value)}
@@ -55,7 +55,7 @@ const Register = () => {
           name="bio"
           id="bio"
           maxLength={100}
-          className="mb-4 p-2 border border-gray-300 rounded"
+          className="mb-4 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter bio"
           onChange={(e) => setBio(e.target.value)}
         />
@@ -66,7 +66,7 @@ const Register = () => {
           type="email"
           name="email"
           id="email"
-          className="mb-4 p-2 border border-gray-300 rounded"
+          className="mb-4 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter your email"
           required
           onChange={(e) => setEmail(e.target.value)}
@@ -80,7 +80,7 @@ const Register = () => {
           id="password"
           minLength={6}
           required
-          className="mb-1 p-2 border border-gray-300 rounded"
+          className="mb-1 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter your password"
           onChange={(e) => setPassword(e.target.value)}
         />

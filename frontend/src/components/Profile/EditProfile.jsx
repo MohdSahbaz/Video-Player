@@ -40,7 +40,7 @@ const EditProfile = () => {
           value={newName}
           maxLength={30}
           autoFocus
-          className="mb-4 p-2 border border-gray-300 rounded"
+          className="mb-4 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter your name"
           onChange={(e) => setNewName(e.target.value)}
         />
@@ -53,7 +53,7 @@ const EditProfile = () => {
           id="bio"
           maxLength={100}
           value={bio}
-          className="mb-4 p-2 border border-gray-300 rounded"
+          className="mb-4 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter your bio"
           onChange={(e) => setBio(e.target.value)}
         />

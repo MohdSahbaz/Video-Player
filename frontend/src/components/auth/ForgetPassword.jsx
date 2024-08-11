@@ -52,7 +52,7 @@ const ForgetPassword = () => {
           name="email"
           id="email"
           autoFocus
-          className="mb-2 p-2 border border-gray-300 rounded"
+          className="mb-2 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter your email"
           required
           onChange={(e) => setEmail(e.target.value)}
@@ -71,7 +71,7 @@ const ForgetPassword = () => {
           name="otp"
           id="otp"
           required
-          className="mb-1 p-2 border border-gray-300 rounded"
+          className="mb-1 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter OTP"
           onChange={(e) => setOTP(e.target.value)}
         />
@@ -83,7 +83,7 @@ const ForgetPassword = () => {
           name="password"
           id="password"
           required
-          className="mb-1 p-2 border border-gray-300 rounded"
+          className="mb-1 p-2 border border-gray-300 rounded bg-transparent"
           placeholder="Enter your password"
           onChange={(e) => setNewPassword(e.target.value)}
         />

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useState } from "react";
+import { createContext, useId, useState } from "react";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -8,6 +8,10 @@ const VideoContext = createContext();
 const VideoProvider = ({ children }) => {
   //take the userId to get the user video
   const [user, setUser] = useState({});
+
+  // setUserId
+  const [userId, setUserId] = useState("");
+
   //Single user videos
   const [userVideos, setUserVideos] = useState([]);
 
@@ -98,6 +102,54 @@ const VideoProvider = ({ children }) => {
     }
   };
 
+  const getUserId = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      return alert("Please Login");
+    }
+
+    try {
+      const response = await axios.get(`${apiUrl}/getuserid`, {
+        headers: { "auth-Token": token },
+      });
+
+      if (response && response.data) {
+        setUserId(response.data);
+      } else {
+        console.error("Unexpected response structure", response);
+      }
+    } catch (error) {
+      console.error("Error fetching user ID", error);
+      alert("An error occurred while fetching user ID.");
+    }
+  };
+
+  // Like and Dislike videos
+  const toggleVideoLikeStatus = async (userId, videoId) => {
+    try {
+      await axios.post(`${apiUrl}/likevideo`, {
+        userId,
+        videoId,
+      });
+    } catch (error) {
+      alert("Please login " + error.message);
+    }
+  };
+
+  const checkLike = async (userId, videoId, setIsLiked) => {
+    if (!userId || !videoId) {
+      return alert("Data not found");
+    }
+    try {
+      const response = await axios.get(`${apiUrl}/getlikevideo`, {
+        params: { userId, videoId },
+      });
+      setIsLiked(response.data);
+    } catch (error) {
+      alert("Something went wrong " + error.message);
+    }
+  };
+
   return (
     <VideoContext.Provider
       value={{
@@ -112,6 +164,10 @@ const VideoProvider = ({ children }) => {
         userVideos,
         user,
         formatViews,
+        toggleVideoLikeStatus,
+        getUserId,
+        checkLike,
+        userId,
       }}
     >
       {children}

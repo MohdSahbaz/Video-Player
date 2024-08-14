@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { formatDistanceToNow, parseISO } from "date-fns";
-import { BiLike, BiDislike } from "react-icons/bi";
+import { BiLike, BiSolidLike, BiDislike } from "react-icons/bi";
 import { MdOutlinePlaylistAdd, MdOutlineWatchLater } from "react-icons/md";
 import { useContext, useEffect, useState } from "react";
 import { VideoContext } from "../../context/videosContext";
@@ -9,15 +9,38 @@ import { VideoContext } from "../../context/videosContext";
 export default function SingleVideo() {
   const [searchParams] = useSearchParams();
   const videoId = searchParams.get("video");
-  const { singleVideo, getVideoById, message, formatViews } = useContext(VideoContext);
+  // const [userId, setUserId] = useState(null);
+  const {
+    singleVideo,
+    getVideoById,
+    message,
+    formatViews,
+    toggleVideoLikeStatus,
+    getUserId,
+    checkLike,
+    userId,
+  } = useContext(VideoContext);
+  const [liked, setLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState();
   const [loading, setLoading] = useState(true);
+
+  const handleLike = async () => {
+    if (userId) {
+      await toggleVideoLikeStatus(userId, videoId);
+      setLiked(!liked);
+    }
+  };
 
   // Get the video
   useEffect(() => {
     const fetchVideo = async () => {
       if (videoId) {
         try {
+          await getUserId();
           await getVideoById(videoId);
+          if (userId) {
+            await checkLike(userId, videoId, setIsLiked);
+          }
         } catch (error) {
           console.error("Error fetching video:", error);
         } finally {
@@ -26,10 +49,12 @@ export default function SingleVideo() {
       }
     };
     fetchVideo();
-  }, [videoId, getVideoById]);
+  }, [userId, videoId, liked]);
 
   // Set the time
-  const uploadDate = singleVideo?.createdAt ? parseISO(singleVideo.createdAt) : new Date();
+  const uploadDate = singleVideo?.createdAt
+    ? parseISO(singleVideo.createdAt)
+    : new Date();
   const timeAgo = formatDistanceToNow(uploadDate, { addSuffix: true });
   const formattedViews = formatViews(singleVideo?.views || 0); // Handle undefined views
 
@@ -42,7 +67,7 @@ export default function SingleVideo() {
   }
 
   return (
-    <div className="text-white md:ml-8 px-4 w-screen flex flex-wrap flex-col py-5 md:py-8 items-center gap-10">
+    <div className="text-white md:ml-8 px-4 flex flex-wrap flex-col py-5 md:py-8 items-center gap-10">
       {singleVideo && singleVideo.url ? (
         <div className="flex flex-col gap-1 w-full max-w-2xl">
           <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
@@ -63,8 +88,15 @@ export default function SingleVideo() {
               Follow
             </b>
             <div className="flex flex-nowrap py-1">
-              <b className="flex justify-center gap-2 items-center rounded-l-lg border-r bg-slate-700/[0.5] hover:bg-slate-700/[1] px-2 py-1 cursor-pointer">
-                <BiLike className="bg-transparent text-lg" />
+              <b
+                onClick={() => handleLike()}
+                className="flex justify-center gap-2 items-center rounded-l-lg border-r bg-slate-700/[0.5] hover:bg-slate-700/[1] px-2 py-1 cursor-pointer"
+              >
+                {!isLiked ? (
+                  <BiLike className="bg-transparent text-lg" />
+                ) : (
+                  <BiSolidLike className="bg-transparent text-lg text-red-600" />
+                )}
                 {singleVideo.likes}
               </b>
               <b className="flex justify-center gap-2 items-center rounded-r-lg border-l bg-slate-700/[0.5] hover:bg-slate-700/[1] px-2 py-1 cursor-pointer">

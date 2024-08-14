@@ -91,6 +91,25 @@ const profile = async (req, res) => {
   }
 };
 
+// getUserId
+const getUserId = async (req, res) => {
+  const token = req.header("auth-token");
+  if (!token) {
+    return res.status(401).json({ message: "Please login" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.USER_TOKEN);
+    if (!decoded) {
+      return res.status(404).json({ message: "UserId not found" });
+    }
+    const userId = decoded.userId;
+    res.status(200).json(userId);
+  } catch (error) {
+    res.status(401).json({ message: "Token is not valid" });
+  }
+};
+
 // Update profile
 const updateProfile = async (req, res) => {
   try {
@@ -119,5 +138,6 @@ module.exports = {
   loginUser,
   registerUser,
   profile,
+  getUserId,
   updateProfile,
 };

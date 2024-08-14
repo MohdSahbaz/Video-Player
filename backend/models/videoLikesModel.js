@@ -27,10 +27,6 @@ const VideoLike = sequelize.define(
       },
       onDelete: "CASCADE",
     },
-    isLiked: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
   },
   {
     indexes: [
@@ -42,7 +38,7 @@ const VideoLike = sequelize.define(
   }
 );
 
-// VideoLike.sync()
+// VideoLike.sync({ force: true })
 //   .then(() => console.log("VideoLiked Table Created"))
 //   .catch((error) => console.log("VideoLiked Table Not Created " + error));
 

@@ -2,6 +2,7 @@ const Video = require("../models/videosModel");
 const User = require("../models/userModel");
 const VideoLike = require("../models/videoLikesModel");
 const sequelize = require("../config/db");
+
 // Get All Videos
 const getAllVideo = async (req, res) => {
   try {
@@ -103,9 +104,9 @@ const getVideoByUserId = async (req, res) => {
 
 // create   Like
 const createLikeVideos = async (req, res) => {
-  const { userId, videoId, isLiked } = req.body;
+  const { userId, videoId } = req.body;
 
-  if (!userId || !videoId || typeof isLiked !== "boolean" || !isLiked) {
+  if (!userId || !videoId) {
     return res
       .status(400)
       .json({ message: "Please provide all the required information." });
@@ -146,7 +147,7 @@ const createLikeVideos = async (req, res) => {
       }
 
       // User has not liked the video, so add a like
-      await VideoLike.create({ userId, videoId, isLiked }, { transaction: t });
+      await VideoLike.create({ userId, videoId }, { transaction: t });
 
       // Increase the like count in the video table
       await Video.update(
@@ -155,6 +156,26 @@ const createLikeVideos = async (req, res) => {
       );
       res.status(200).json({ message: "Video liked." });
     });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const getLikeVideos = async (req, res) => {
+  const { userId, videoId } = req.query;
+  if (!userId || !videoId) {
+    return res
+      .status(400)
+      .json({ message: "Please provide all the required information." });
+  }
+
+  try {
+    const likedVideo = await VideoLike.findOne({ where: { userId, videoId } });
+    if (likedVideo) {
+      res.status(200).json(true);
+    } else {
+      res.status(200).json(false);
+    }
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error " + error });
   }
@@ -169,4 +190,5 @@ module.exports = {
   trendingVideos,
   getVideoByUserId,
   createLikeVideos,
+  getLikeVideos,
 };

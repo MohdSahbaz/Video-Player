@@ -1,6 +1,7 @@
-const { json } = require("body-parser");
 const Video = require("../models/videosModel");
-
+const User = require("../models/userModel");
+const VideoLike = require("../models/videoLikesModel");
+const sequelize = require("../config/db");
 // Get All Videos
 const getAllVideo = async (req, res) => {
   try {
@@ -100,6 +101,65 @@ const getVideoByUserId = async (req, res) => {
   }
 };
 
+// create   Like
+const createLikeVideos = async (req, res) => {
+  const { userId, videoId, isLiked } = req.body;
+
+  if (!userId || !videoId || typeof isLiked !== "boolean" || !isLiked) {
+    return res
+      .status(400)
+      .json({ message: "Please provide all the required information." });
+  }
+
+  const existingUser = await User.findOne({ where: { user_id: userId } });
+  if (!existingUser) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const existingVideo = await Video.findOne({ where: { video_id: videoId } });
+  if (!existingVideo) {
+    return res.status(404).json({ message: "Video not found." });
+  }
+
+  try {
+    // Start a transaction to avoid race conditions
+    await sequelize.transaction(async (t) => {
+      // check if the user already like the video or not
+      const existingLike = await VideoLike.findOne({
+        where: { userId, videoId },
+        transaction: t,
+      });
+
+      // User already liked the video, so remove the like
+      if (existingLike) {
+        await VideoLike.destroy({
+          where: { userId, videoId },
+          transaction: t,
+        });
+
+        // Decrease the like count in the video table
+        await Video.update(
+          { likes: existingVideo.likes - 1 },
+          { where: { video_id: videoId }, transaction: t }
+        );
+        return res.status(200).json({ message: "Like removed." });
+      }
+
+      // User has not liked the video, so add a like
+      await VideoLike.create({ userId, videoId, isLiked }, { transaction: t });
+
+      // Increase the like count in the video table
+      await Video.update(
+        { likes: existingVideo.likes + 1 },
+        { where: { video_id: videoId }, transaction: t }
+      );
+      res.status(200).json({ message: "Video liked." });
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error " + error });
+  }
+};
+
 module.exports = {
   getAllVideo,
   getVideoById,
@@ -108,4 +168,5 @@ module.exports = {
   deleteVideo,
   trendingVideos,
   getVideoByUserId,
+  createLikeVideos,
 };

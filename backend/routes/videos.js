@@ -7,6 +7,7 @@ const {
   deleteVideo,
   trendingVideos,
   getVideoByUserId,
+  createLikeVideos,
 } = require("../controllers/videosControllers");
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.put("/video/:id", updateVideo);
 router.delete("/video/:id", deleteVideo);
 router.get("/trending", trendingVideos);
 router.get("/uservideo/:userId", getVideoByUserId);
+router.post("/likevideos", createLikeVideos);
 
 module.exports = router;

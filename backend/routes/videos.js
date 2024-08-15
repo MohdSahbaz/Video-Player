@@ -9,6 +9,8 @@ const {
   getVideoByUserId,
   createLikeVideos,
   getLikeVideos,
+  createDislikeVideos,
+  getDislikeVideos,
 } = require("../controllers/videosControllers");
 const router = express.Router();
 
@@ -19,7 +21,13 @@ router.put("/video/:id", updateVideo);
 router.delete("/video/:id", deleteVideo);
 router.get("/trending", trendingVideos);
 router.get("/uservideo/:userId", getVideoByUserId);
+
+// like routes
 router.post("/likevideo", createLikeVideos);
 router.get("/getlikevideo", getLikeVideos);
+
+// dislike rooutes
+router.post("/dislikevideos", createDislikeVideos);
+router.get("/getdislikevideo", getDislikeVideos);
 
 module.exports = router;

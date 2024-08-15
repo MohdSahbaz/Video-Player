@@ -1,6 +1,7 @@
 const Video = require("../models/videosModel");
 const User = require("../models/userModel");
 const VideoLike = require("../models/videoLikesModel");
+const VideoDislike = require("../models/videoDislikesModel");
 const sequelize = require("../config/db");
 
 // Get All Videos
@@ -161,6 +162,7 @@ const createLikeVideos = async (req, res) => {
   }
 };
 
+// check video is liked by user or not to set the like button
 const getLikeVideos = async (req, res) => {
   const { userId, videoId } = req.query;
   if (!userId || !videoId) {
@@ -181,6 +183,85 @@ const getLikeVideos = async (req, res) => {
   }
 };
 
+const createDislikeVideos = async (req, res) => {
+  const { userId, videoId } = req.body;
+  if (!userId || !videoId) {
+    return res
+      .status(400)
+      .json({ message: "Please provide all the required information." });
+  }
+
+  const existingUser = await User.findOne({ where: { user_id: userId } });
+  if (!existingUser) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const existingVideo = await Video.findOne({ where: { video_id: videoId } });
+  if (!existingVideo) {
+    return res.status(404).json({ message: "Video not found" });
+  }
+
+  try {
+    await sequelize.transaction(async (t) => {
+      // Check if the user already disliked the video or not
+      const existingDislike = await VideoDislike.findOne({
+        where: { userId, videoId },
+        transaction: t,
+      });
+
+      if (existingDislike) {
+        // User already disliked the video, so remove the dislike
+        await VideoDislike.destroy({
+          where: { userId, videoId },
+          transaction: t,
+        });
+
+        // Decrease the dislike count in the video table
+        await Video.update(
+          { dislikes: existingVideo.dislikes - 1 },
+          { where: { video_id: videoId }, transaction: t }
+        );
+        return res.status(200).json({ message: "Dislike removed." });
+      }
+
+      // Add a new dislike
+      await VideoDislike.create({ userId, videoId }, { transaction: t });
+
+      // Increase the dislike count in the video table
+      await Video.update(
+        { dislikes: existingVideo.dislikes + 1 },
+        { where: { video_id: videoId }, transaction: t }
+      );
+      return res.status(200).json({ message: "Video disliked." });
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error: " + error });
+  }
+};
+
+// check video is disliked by user or not to set the dislike button
+const getDislikeVideos = async (req, res) => {
+  const { userId, videoId } = req.query;
+  if (!userId || !videoId) {
+    return res
+      .status(400)
+      .json({ message: "Please provide all the required information." });
+  }
+
+  try {
+    const dislikedVideo = await VideoDislike.findOne({
+      where: { userId, videoId },
+    });
+    if (dislikedVideo) {
+      res.status(200).json(true);
+    } else {
+      res.status(200).json(false);
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error " + error });
+  }
+};
+
 module.exports = {
   getAllVideo,
   getVideoById,
@@ -191,4 +272,6 @@ module.exports = {
   getVideoByUserId,
   createLikeVideos,
   getLikeVideos,
+  createDislikeVideos,
+  getDislikeVideos,
 };

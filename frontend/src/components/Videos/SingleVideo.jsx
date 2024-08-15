@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { formatDistanceToNow, parseISO } from "date-fns";
-import { BiLike, BiSolidLike, BiDislike } from "react-icons/bi";
+import { BiLike, BiSolidLike, BiDislike, BiSolidDislike } from "react-icons/bi";
 import { MdOutlinePlaylistAdd, MdOutlineWatchLater } from "react-icons/md";
 import { useContext, useEffect, useState } from "react";
 import { VideoContext } from "../../context/videosContext";
@@ -19,15 +19,38 @@ export default function SingleVideo() {
     getUserId,
     checkLike,
     userId,
+    toggleVideoDislikeStatus,
+    checkDislike,
   } = useContext(VideoContext);
-  const [liked, setLiked] = useState(false);
-  const [isLiked, setIsLiked] = useState();
+  const [liked, setLiked] = useState(false); // to change the like state
+  const [isLiked, setIsLiked] = useState(false); // check user is liked video or not
+
+  const [disliked, setDisliked] = useState(false); // to change the dislike state
+  const [isDisliked, setIsDisliked] = useState(false);
+
   const [loading, setLoading] = useState(true);
 
   const handleLike = async () => {
-    if (userId) {
+    if (userId && isDisliked) {
+      await toggleVideoLikeStatus(userId, videoId);
+      await toggleVideoDislikeStatus(userId, videoId);
+      setLiked(!liked);
+      setDisliked(!disliked);
+    } else if (userId && !isDisliked) {
       await toggleVideoLikeStatus(userId, videoId);
       setLiked(!liked);
+    }
+  };
+
+  const handleDisike = async () => {
+    if (userId && isLiked) {
+      await toggleVideoLikeStatus(userId, videoId);
+      await toggleVideoDislikeStatus(userId, videoId);
+      setLiked(!liked);
+      setDisliked(!disliked);
+    } else if (userId && !isLiked) {
+      await toggleVideoDislikeStatus(userId, videoId);
+      setDisliked(!disliked);
     }
   };
 
@@ -40,6 +63,7 @@ export default function SingleVideo() {
           await getVideoById(videoId);
           if (userId) {
             await checkLike(userId, videoId, setIsLiked);
+            await checkDislike(userId, videoId, setIsDisliked);
           }
         } catch (error) {
           console.error("Error fetching video:", error);
@@ -49,7 +73,7 @@ export default function SingleVideo() {
       }
     };
     fetchVideo();
-  }, [userId, videoId, liked]);
+  }, [userId, videoId, liked, disliked]);
 
   // Set the time
   const uploadDate = singleVideo?.createdAt
@@ -90,18 +114,33 @@ export default function SingleVideo() {
             <div className="flex flex-nowrap py-1">
               <b
                 onClick={() => handleLike()}
-                className="flex justify-center gap-2 items-center rounded-l-lg border-r bg-slate-700/[0.5] hover:bg-slate-700/[1] px-2 py-1 cursor-pointer"
+                className={`flex justify-center gap-2 items-center rounded-l-lg border-r px-2 py-1 cursor-pointer ${
+                  isLiked
+                    ? "bg-emerald-600"
+                    : "bg-slate-700/[0.5] hover:bg-slate-700"
+                }`}
               >
                 {!isLiked ? (
                   <BiLike className="bg-transparent text-lg" />
                 ) : (
-                  <BiSolidLike className="bg-transparent text-lg text-red-600" />
+                  <BiSolidLike className="bg-transparent text-lg" />
                 )}
                 {singleVideo.likes}
               </b>
-              <b className="flex justify-center gap-2 items-center rounded-r-lg border-l bg-slate-700/[0.5] hover:bg-slate-700/[1] px-2 py-1 cursor-pointer">
-                <BiDislike className="bg-transparent text-lg" />
-                {singleVideo.dislikes}
+              <b
+                onClick={handleDisike}
+                className={`flex justify-center gap-2 items-center rounded-r-lg border-l px-4 py-1 cursor-pointer ${
+                  isDisliked
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-slate-700/[0.5] hover:bg-slate-700"
+                }}`}
+              >
+                {!isDisliked ? (
+                  <BiDislike className="bg-transparent text-lg" />
+                ) : (
+                  <BiSolidDislike className="bg-transparent text-lg" />
+                )}
+                {/* {singleVideo.dislikes} */}
               </b>
             </div>
           </div>

@@ -150,6 +150,32 @@ const VideoProvider = ({ children }) => {
     }
   };
 
+  // Like and Dislike videos
+  const toggleVideoDislikeStatus = async (userId, videoId) => {
+    try {
+      await axios.post(`${apiUrl}/dislikevideos`, {
+        userId,
+        videoId,
+      });
+    } catch (error) {
+      alert("Please login " + error.message);
+    }
+  };
+
+  const checkDislike = async (userId, videoId, setIsDisliked) => {
+    if (!userId || !videoId) {
+      return alert("Data not found");
+    }
+    try {
+      const response = await axios.get(`${apiUrl}/getdislikevideo`, {
+        params: { userId, videoId },
+      });
+      setIsDisliked(response.data);
+    } catch (error) {
+      alert("Something went wrong " + error.message);
+    }
+  };
+
   return (
     <VideoContext.Provider
       value={{
@@ -168,6 +194,8 @@ const VideoProvider = ({ children }) => {
         getUserId,
         checkLike,
         userId,
+        toggleVideoDislikeStatus,
+        checkDislike,
       }}
     >
       {children}

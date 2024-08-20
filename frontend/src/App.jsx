@@ -18,6 +18,7 @@ import UploadVideo from "./components/Videos/UploadVideo";
 import ForgetPassword from "./components/auth/ForgetPassword";
 import ChangePassword from "./components/auth/ChangePassword";
 import UserVideos from "./components/Videos/UserVideos";
+import VisitProfile from "./components/Profile/VisitProfile";
 
 // Authentication check
 const checkLogin = () => !!localStorage.getItem("authToken");
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "myvideo",
         element: <ProtectedRoute element={<UserVideos />} />,
+      },
+      {
+        path: ":username",
+        element: <VisitProfile />,
       },
     ],
   },

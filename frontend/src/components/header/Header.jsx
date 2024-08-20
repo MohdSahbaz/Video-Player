@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
 import { GoVideo } from "react-icons/go";
 import { RiVideoAddLine } from "react-icons/ri";
-import { FaUserCircle, FaSearch } from "react-icons/fa";
+import { FaUserCircle, FaSearch, FaUser } from "react-icons/fa";
 import { IoMdMenu } from "react-icons/io";
 import { AuthContext } from "../../context/auth/authContext";
 
@@ -129,12 +129,21 @@ const Header = () => {
               onClick={() => navigate("/upload-video")}
               className="text-2xl cursor-pointer"
             />
-            <img
-              src={user.picture}
-              onClick={handleAuth}
-              className="w-8 rounded-full cursor-pointer"
-              alt="profile"
-            />
+            <div>
+              {user.picture ? (
+                <img
+                  src={user.picture}
+                  onClick={handleAuth}
+                  className="w-8 rounded-full cursor-pointer"
+                  alt="profile"
+                />
+              ) : (
+                <FaUserCircle
+                  className="w-6 h-8 cursor-pointer"
+                  onClick={handleAuth}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>

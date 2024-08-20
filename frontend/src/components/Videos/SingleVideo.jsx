@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { BiLike, BiSolidLike, BiDislike, BiSolidDislike } from "react-icons/bi";
@@ -9,6 +9,7 @@ import { VideoContext } from "../../context/videosContext";
 export default function SingleVideo() {
   const [searchParams] = useSearchParams();
   const videoId = searchParams.get("video");
+  const naviagte = useNavigate();
   // const [userId, setUserId] = useState(null);
   const {
     singleVideo,
@@ -75,6 +76,10 @@ export default function SingleVideo() {
     fetchVideo();
   }, [userId, videoId, liked, disliked]);
 
+  const handleVisitUserProfile = (username) => {
+    naviagte(`/${username}`);
+  };
+
   // Set the time
   const uploadDate = singleVideo?.createdAt
     ? parseISO(singleVideo.createdAt)
@@ -105,7 +110,10 @@ export default function SingleVideo() {
           </div>
           <b>{singleVideo.title}</b>
           <div className="flex flex-wrap items-center">
-            <b className="mr-2 px-2 py-1 bg-cyan-900 hover:bg-cyan-950 rounded cursor-pointer">
+            <b
+              onClick={() => handleVisitUserProfile(singleVideo.uploader_name)}
+              className="mr-2 px-2 py-1 bg-cyan-900 hover:bg-cyan-950 rounded cursor-pointer"
+            >
               @{singleVideo.uploader_name}
             </b>
             <b className="mr-2 bg-violet-800 hover:bg-violet-900 rounded px-4 py-1 cursor-pointer">

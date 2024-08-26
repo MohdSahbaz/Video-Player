@@ -7,13 +7,16 @@ import "./index.css";
 import { VideoProvider } from "./context/videosContext.jsx";
 import { AuthProvider } from "./context/auth/authContext.jsx";
 import { ForgetPasswordProvider } from "./context/auth/forgetPassword.jsx";
+import { UserProvider } from "./context/user.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <VideoProvider>
       <AuthProvider>
         <ForgetPasswordProvider>
-          <App />
+          <UserProvider>
+            <App />
+          </UserProvider>
         </ForgetPasswordProvider>
       </AuthProvider>
     </VideoProvider>

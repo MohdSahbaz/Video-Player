@@ -17,7 +17,7 @@ import EditProfile from "./components/Profile/EditProfile";
 import UploadVideo from "./components/Videos/UploadVideo";
 import ForgetPassword from "./components/auth/ForgetPassword";
 import ChangePassword from "./components/auth/ChangePassword";
-import UserVideos from "./components/Videos/UserVideos";
+const UserVideos = lazy(() => import("./components/Videos/UserVideos"));
 import VisitProfile from "./components/Profile/VisitProfile";
 
 // Authentication check
@@ -26,6 +26,10 @@ const checkLogin = () => !!localStorage.getItem("authToken");
 // Protected route components
 const ProtectedRoute = ({ element }) => {
   return checkLogin() ? element : <Navigate to={"/login"} />;
+};
+
+const ProtectedRouteAuth = ({ element }) => {
+  return !checkLogin() ? element : <Navigate to={"/profile"} />;
 };
 
 const router = createBrowserRouter([
@@ -55,11 +59,11 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
+        element: ProtectedRouteAuth(<Login />),
       },
       {
         path: "register",
-        element: <Register />,
+        element: ProtectedRouteAuth(<Register />),
       },
       {
         path: "forgot-password",
@@ -83,7 +87,11 @@ const router = createBrowserRouter([
       },
       {
         path: "myvideo",
-        element: <ProtectedRoute element={<UserVideos />} />,
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <ProtectedRoute element={<UserVideos />} />
+          </Suspense>
+        ),
       },
       {
         path: ":username",

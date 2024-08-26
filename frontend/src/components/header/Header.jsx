@@ -134,7 +134,7 @@ const Header = () => {
                 <img
                   src={user.picture}
                   onClick={handleAuth}
-                  className="w-8 rounded-full cursor-pointer"
+                  className="w-8 rounded-full cursor-pointer border-2"
                   alt="profile"
                 />
               ) : (

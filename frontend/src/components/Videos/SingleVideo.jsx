@@ -32,6 +32,7 @@ export default function SingleVideo() {
   const [loading, setLoading] = useState(true);
 
   const handleLike = async () => {
+    await getUserId();
     if (userId && isDisliked) {
       await toggleVideoLikeStatus(userId, videoId);
       await toggleVideoDislikeStatus(userId, videoId);
@@ -44,6 +45,7 @@ export default function SingleVideo() {
   };
 
   const handleDisike = async () => {
+    await getUserId();
     if (userId && isLiked) {
       await toggleVideoLikeStatus(userId, videoId);
       await toggleVideoDislikeStatus(userId, videoId);
@@ -60,7 +62,6 @@ export default function SingleVideo() {
     const fetchVideo = async () => {
       if (videoId) {
         try {
-          await getUserId();
           await getVideoById(videoId);
           if (userId) {
             await checkLike(userId, videoId, setIsLiked);

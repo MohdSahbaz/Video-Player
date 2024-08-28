@@ -59,11 +59,11 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: ProtectedRouteAuth(<Login />),
+        element: <Login />,
       },
       {
         path: "register",
-        element: ProtectedRouteAuth(<Register />),
+        element: <Register />,
       },
       {
         path: "forgot-password",

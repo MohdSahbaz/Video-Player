@@ -8,6 +8,7 @@ const ForgetPasswordProvider = ({ children }) => {
 
   // Function to get OTP
   const getForgetOTP = async (email) => {
+    setError(null);
     try {
       setError(null);
       if (email) {
@@ -23,6 +24,7 @@ const ForgetPasswordProvider = ({ children }) => {
 
   // Function to forget password
   const forgetPassword = async (email, otp, newPassword) => {
+    setError(null);
     try {
       setError(null);
       if (email && otp && newPassword) {
@@ -43,6 +45,7 @@ const ForgetPasswordProvider = ({ children }) => {
 
   // Function to change password with the help of old password
   const changePassword = async (email, oldPassword, newPassword) => {
+    setError(null);
     try {
       setError(null);
       if (email && oldPassword && newPassword) {

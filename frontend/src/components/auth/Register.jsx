@@ -18,10 +18,12 @@ const Register = () => {
     <div className="flex flex-col justify-center items-center pt-4 pb-2">
       <form
         onSubmit={handleLogin}
-        className="flex flex-col justify-center px-8 py-1 pb-3 rounded shadow hover:shadow-md shadow-slate-950 hover:shadow-gray-600 w-80 transition-all duration-300 ease-in-out transform"
+        className="flex flex-col justify-center px-8 py-1 pb-3 rounded shadow hover:shadow-md shadow-slate-950 hover:shadow-gray-600 md:w-2/4 w-2/3  transition-all duration-300 ease-in-out transform"
       >
-        <h1 className="text-2xl font-bold text-center mb-2">Register</h1>
-        <label
+        <h1 className="text-2xl font-bold text-center mb-2">
+          Create a SolKer Account
+        </h1>
+        {/* <label
           htmlFor="profileImage"
           className="mb-2 font-semibold text-gray-600"
         >
@@ -32,7 +34,7 @@ const Register = () => {
           name="profileImage"
           id="profileImage"
           className="mb-4 opacity-50 cursor-pointer"
-        />
+        /> */}
         <label htmlFor="name" className="mb-2 font-semibold text-gray-600">
           User Name<span className="text-red-500">*</span>
         </label>

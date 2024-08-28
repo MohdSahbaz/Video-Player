@@ -41,7 +41,7 @@ const ForgetPassword = () => {
     <div className="flex flex-col justify-center items-center py-3 ">
       <form
         onSubmit={handleLogin}
-        className="flex flex-col justify-center px-8 py-3 rounded shadow shadow-slate-950 hover:shadow-gray-600 hover:shadow-md transition-all duration-300 ease-in-out transform md:w-80 w-2/3"
+        className="flex flex-col justify-center px-8 py-3 rounded shadow shadow-slate-950 hover:shadow-gray-600 hover:shadow-md transition-all duration-300 ease-in-out transform md:w-2/4 w-2/3"
       >
         <h1 className="text-2xl font-bold mb-6 text-center">Forgot Password</h1>
         <label htmlFor="email" className="mb-2 font-semibold text-gray-600">

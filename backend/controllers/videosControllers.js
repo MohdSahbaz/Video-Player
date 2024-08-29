@@ -264,6 +264,7 @@ const getDislikeVideos = async (req, res) => {
   }
 };
 
+// create watch later
 const createWatchLater = async (req, res) => {
   const { userId, videoId } = req.body;
 
@@ -284,10 +285,26 @@ const createWatchLater = async (req, res) => {
   }
 
   try {
+    // Check if the video is already in the Watch Later list
+    const alreadySetWatchLater = await WatchLater.findOne({
+      where: { user_id: userId, video_id: videoId },
+    });
+
+    // If found, remove the video from Watch Later
+    if (alreadySetWatchLater) {
+      await WatchLater.destroy({
+        where: { user_id: userId, video_id: videoId },
+      });
+      return res
+        .status(200)
+        .json({ message: "Video removed from Watch Later" });
+    }
+
+    // Add the video to Watch Later
     await WatchLater.create({ user_id: userId, video_id: videoId });
     return res.status(201).json({ message: "Video added to Watch Later" });
   } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error: " + error });
   }
 };
 

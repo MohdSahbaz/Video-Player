@@ -329,6 +329,44 @@ const getWatchLaterVideos = async (req, res) => {
   }
 };
 
+// get a single user sungle watchLater video
+const singleWatchLaterVideo = async (req, res) => {
+  const { userId, videoId } = req.params;
+
+  if (!userId || !videoId) {
+    return res.status(400).json({ error: "User ID or Video ID is missing" });
+  }
+
+  // find user
+  const user = await User.findByPk(userId);
+  if (!user) {
+    return res.status(404).json(false);
+  }
+
+  // find video
+  const video = await Video.findByPk(videoId);
+  if (!video) {
+    return res.status(404).json(false);
+  }
+
+  try {
+    // Check if the video is already in the Watch Later list
+    const getWatchLaterVideo = await WatchLater.findOne({
+      where: { user_id: userId, video_id: videoId },
+    });
+
+    // If found, send true
+    if (getWatchLaterVideo) {
+      await WatchLater.findOne({
+        where: { user_id: userId, video_id: videoId },
+      });
+      return res.status(200).json(true);
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   getAllVideo,
   getVideoById,
@@ -343,4 +381,5 @@ module.exports = {
   getDislikeVideos,
   createWatchLater,
   getWatchLaterVideos,
+  singleWatchLaterVideo,
 };

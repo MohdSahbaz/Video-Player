@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const VideoLike = require("../models/videoLikesModel");
 const VideoDislike = require("../models/videoDislikesModel");
 const sequelize = require("../config/db");
+const WatchLater = require("../models/watchLaterModel");
+const { where } = require("sequelize");
 
 // Get All Videos
 const getAllVideo = async (req, res) => {
@@ -235,7 +237,7 @@ const createDislikeVideos = async (req, res) => {
       return res.status(200).json({ message: "Video disliked." });
     });
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error: " + error });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -258,7 +260,55 @@ const getDislikeVideos = async (req, res) => {
       res.status(200).json(false);
     }
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error " + error });
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const createWatchLater = async (req, res) => {
+  const { userId, videoId } = req.body;
+
+  if (!userId || !videoId) {
+    return res.status(400).json({ error: "User ID or Video ID is missing" });
+  }
+
+  // find user
+  const user = await User.findByPk(userId);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  // find video
+  const video = await Video.findByPk(videoId);
+  if (!video) {
+    return res.status(404).json({ error: "Video not found" });
+  }
+
+  try {
+    await WatchLater.create({ user_id: userId, video_id: videoId });
+    return res.status(201).json({ message: "Video added to Watch Later" });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// get watch later videos
+const getWatchLaterVideos = async (req, res) => {
+  const { userId } = req.params;
+  console.log(userId);
+  if (!userId) {
+    return res.status(400).json({ error: "User is missing" });
+  }
+
+  try {
+    const watchLaterVideos = await WatchLater.findAll({
+      where: { user_id: userId },
+    });
+    if (watchLaterVideos.length === 0) {
+      return res.status(404).json({ message: "No Videos in Watch Later" });
+    }
+    return res.status(200).json({ watchLaterVideos });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -274,4 +324,6 @@ module.exports = {
   getLikeVideos,
   createDislikeVideos,
   getDislikeVideos,
+  createWatchLater,
+  getWatchLaterVideos,
 };

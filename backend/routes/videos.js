@@ -11,6 +11,8 @@ const {
   getLikeVideos,
   createDislikeVideos,
   getDislikeVideos,
+  createWatchLater,
+  getWatchLaterVideos,
 } = require("../controllers/videosControllers");
 const router = express.Router();
 
@@ -29,5 +31,9 @@ router.get("/getlikevideo", getLikeVideos);
 // dislike rooutes
 router.post("/dislikevideos", createDislikeVideos);
 router.get("/getdislikevideo", getDislikeVideos);
+
+// watch later routes
+router.post("/addwatchlater", createWatchLater);
+router.get("/getwatchlater/:userId", getWatchLaterVideos);
 
 module.exports = router;

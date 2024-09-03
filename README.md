@@ -50,7 +50,6 @@ A full-featured video streaming platform built with the PERN stack (PostgreSQL, 
    ```
 5. Start the development server:
    ```bash
-   cd ..
    npm run dev
    ```
 6. Open your browser and navigate to `http://localhost:5173` to view the application.
@@ -62,7 +61,6 @@ A full-featured video streaming platform built with the PERN stack (PostgreSQL, 
    ```
 8. Start the development server:
    ```bash
-   cd ..
    node app.js or nodemon start
    ```
 9. Open your browser and navigate to `http://localhost:3000` to view the application.

@@ -59,6 +59,17 @@ A full-featured video streaming platform built with the PERN stack (PostgreSQL, 
    ```
 7. Open your browser and navigate to `http://localhost:5173` to view the application.
 
+8. 5. Install backend dependencies:
+   ```bash
+   cd backend
+   npm install
+   ```
+9. Start the development server:
+   ```bash
+   cd ..
+   node app.js or nodemon start
+   ```
+
 ## Usage
 
 - **Home Page:** Browse all available videos on the platform.

@@ -31,11 +31,7 @@ A full-featured video streaming platform built with the PERN stack (PostgreSQL, 
    ```bash
    cd Video-Player
    ```
-3. Install the backend dependencies:
-   ```bash
-   npm install
-   ```
-4. Set up your PostgreSQL connection in a `.env` file:
+3. Set up your PostgreSQL connection in a `.env` file:
    ```bash
    SERVER_PORT = 3000
    DB_NAME = solkervideos
@@ -47,29 +43,29 @@ A full-featured video streaming platform built with the PERN stack (PostgreSQL, 
    EMAIL = email 
    EMAIL_PASSWORD = email_password / token
    ```
-5. Install frontend dependencies:
+4. Install frontend dependencies:
    ```bash
    cd frontend
    npm install
    ```
-6. Start the development server:
+5. Start the development server:
    ```bash
    cd ..
    npm run dev
    ```
-7. Open your browser and navigate to `http://localhost:5173` to view the application.
+6. Open your browser and navigate to `http://localhost:5173` to view the application.
 
-8. 5. Install backend dependencies:
+7. Install backend dependencies:
    ```bash
    cd backend
    npm install
    ```
-9. Start the development server:
+8. Start the development server:
    ```bash
    cd ..
    node app.js or nodemon start
    ```
-
+9. Open your browser and navigate to `http://localhost:3000` to view the application.
 ## Usage
 
 - **Home Page:** Browse all available videos on the platform.

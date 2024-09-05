@@ -18,6 +18,8 @@ const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
   const [singleVideo, setSingleVideo] = useState({});
   const [trendingVideos, setTrendingVideos] = useState([]);
+  const [isWatchLater, setIsWatchLater] = useState([]);
+
   const [message, setMessage] = useState(null);
 
   const getAllVideos = async () => {
@@ -176,6 +178,9 @@ const VideoProvider = ({ children }) => {
     }
   };
 
+  // watch later
+  const setWatchLaterVideo = async (userId, videoId) => {};
+
   return (
     <VideoContext.Provider
       value={{
@@ -196,6 +201,7 @@ const VideoProvider = ({ children }) => {
         userId,
         toggleVideoDislikeStatus,
         checkDislike,
+        setWatchLaterVideo,
       }}
     >
       {children}

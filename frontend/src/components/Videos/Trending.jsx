@@ -22,6 +22,9 @@ const Trending = () => {
 
   return (
     <div className="text-white px-4 py-6 md:px-8 md:py-8">
+      <h1 className="text-center mb-4 font-bold text-xl md:text-2xl">
+        Trending Videos
+      </h1>
       {message && <p className="text-red-500 mb-4">{message}</p>}
       {trendingVideos.length === 0 ? (
         <p className="text-gray-500">No trending videos available.</p>

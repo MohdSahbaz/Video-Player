@@ -56,11 +56,6 @@ const Header = () => {
                   onClick={handleToggleMenu}
                 />
                 <SideBarLink
-                  to={"playlist"}
-                  label={"Playlist"}
-                  onClick={handleToggleMenu}
-                />
-                <SideBarLink
                   to={"watchlater"}
                   label={"Watch Later"}
                   onClick={handleToggleMenu}
@@ -68,11 +63,6 @@ const Header = () => {
                 <SideBarLink
                   to={"following"}
                   label={"Following"}
-                  onClick={handleToggleMenu}
-                />
-                <SideBarLink
-                  to={"liked"}
-                  label={"Liked Videos"}
                   onClick={handleToggleMenu}
                 />
                 <SideBarLink

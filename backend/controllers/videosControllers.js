@@ -4,7 +4,6 @@ const VideoLike = require("../models/videoLikesModel");
 const VideoDislike = require("../models/videoDislikesModel");
 const sequelize = require("../config/db");
 const WatchLater = require("../models/watchLaterModel");
-const { where } = require("sequelize");
 
 // Get All Videos
 const getAllVideo = async (req, res) => {
@@ -311,27 +310,43 @@ const createWatchLater = async (req, res) => {
 // get watch later videos
 const getWatchLaterVideos = async (req, res) => {
   const { userId } = req.params;
-  console.log(userId);
   if (!userId) {
     return res.status(400).json({ error: "User is missing" });
   }
 
+  // find user
+  const user = await User.findByPk(userId);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
   try {
+    // find watch later videos
     const watchLaterVideos = await WatchLater.findAll({
       where: { user_id: userId },
     });
+
     if (watchLaterVideos.length === 0) {
       return res.status(404).json({ message: "No Videos in Watch Later" });
     }
-    return res.status(200).json({ watchLaterVideos });
+
+    // extract video IDs from watchLaterVideos
+    const videoIds = watchLaterVideos.map((video) => video.video_id);
+
+    // find all videos corresponding to those video IDs
+    const allVideos = await Video.findAll({
+      where: { video_id: videoIds },
+    });
+
+    return res.status(200).json(allVideos);
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-// get a single user sungle watchLater video
-const singleWatchLaterVideo = async (req, res) => {
-  const { userId, videoId } = req.params;
+// check the user is video is liked or not
+const checkWatchLaterVideo = async (req, res) => {
+  const { userId, videoId } = req.body;
 
   if (!userId || !videoId) {
     return res.status(400).json({ error: "User ID or Video ID is missing" });
@@ -340,30 +355,29 @@ const singleWatchLaterVideo = async (req, res) => {
   // find user
   const user = await User.findByPk(userId);
   if (!user) {
-    return res.status(404).json(false);
+    return res.status(404).json({ error: "User not found" });
   }
 
   // find video
   const video = await Video.findByPk(videoId);
   if (!video) {
-    return res.status(404).json(false);
+    return res.status(404).json({ error: "Video not found" });
   }
 
   try {
     // Check if the video is already in the Watch Later list
-    const getWatchLaterVideo = await WatchLater.findOne({
+    const alreadySetWatchLater = await WatchLater.findOne({
       where: { user_id: userId, video_id: videoId },
     });
 
-    // If found, send true
-    if (getWatchLaterVideo) {
-      await WatchLater.findOne({
-        where: { user_id: userId, video_id: videoId },
-      });
-      return res.status(200).json(true);
+    // If found, remove the video from Watch Later
+    if (alreadySetWatchLater) {
+      return res.send(true);
     }
+
+    return res.send(false);
   } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error: " + error });
   }
 };
 
@@ -381,5 +395,5 @@ module.exports = {
   getDislikeVideos,
   createWatchLater,
   getWatchLaterVideos,
-  singleWatchLaterVideo,
+  checkWatchLaterVideo,
 };

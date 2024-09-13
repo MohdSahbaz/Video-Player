@@ -20,6 +20,7 @@ import ChangePassword from "./components/auth/ChangePassword";
 const UserVideos = lazy(() => import("./components/Videos/UserVideos"));
 import VisitProfile from "./components/Profile/VisitProfile";
 import WatchLater from "./components/Videos/WatchLater";
+import Followings from "./components/Videos/Followings";
 
 // Authentication check
 const checkLogin = () => !!localStorage.getItem("authToken");
@@ -100,7 +101,19 @@ const router = createBrowserRouter([
       },
       {
         path: "watchlater",
-        element: <WatchLater />,
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <ProtectedRoute element={<WatchLater />} />
+          </Suspense>
+        ),
+      },
+      {
+        path: "following",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <ProtectedRoute element={<Followings />} />
+          </Suspense>
+        ),
       },
     ],
   },

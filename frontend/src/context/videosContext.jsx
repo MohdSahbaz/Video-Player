@@ -18,7 +18,8 @@ const VideoProvider = ({ children }) => {
   const [videos, setVideos] = useState([]);
   const [singleVideo, setSingleVideo] = useState({});
   const [trendingVideos, setTrendingVideos] = useState([]);
-  const [isWatchLater, setIsWatchLater] = useState([]);
+  const [watchLater, setWatchLater] = useState([]);
+  const [alreadySet, isAlreadySet] = useState(false);
 
   const [message, setMessage] = useState(null);
 
@@ -105,6 +106,7 @@ const VideoProvider = ({ children }) => {
   };
 
   const getUserId = async () => {
+    setMessage(null);
     const token = localStorage.getItem("authToken");
     if (!token) {
       return alert("Please Login");
@@ -121,13 +123,13 @@ const VideoProvider = ({ children }) => {
         console.error("Unexpected response structure", response);
       }
     } catch (error) {
-      console.error("Error fetching user ID", error);
-      alert("An error occurred while fetching user ID.");
+      setMessage(error.message);
     }
   };
 
   // Like and Dislike videos
   const toggleVideoLikeStatus = async (userId, videoId) => {
+    setMessage(null);
     try {
       await axios.post(`${apiUrl}/likevideo`, {
         userId,
@@ -139,6 +141,7 @@ const VideoProvider = ({ children }) => {
   };
 
   const checkLike = async (userId, videoId, setIsLiked) => {
+    setMessage(null);
     if (!userId || !videoId) {
       return alert("Data not found");
     }
@@ -148,12 +151,13 @@ const VideoProvider = ({ children }) => {
       });
       setIsLiked(response.data);
     } catch (error) {
-      alert("Something went wrong " + error.message);
+      setMessage(error.message);
     }
   };
 
-  // Like and Dislike videos
+  // Dislike videos
   const toggleVideoDislikeStatus = async (userId, videoId) => {
+    setMessage(null);
     try {
       await axios.post(`${apiUrl}/dislikevideos`, {
         userId,
@@ -164,22 +168,72 @@ const VideoProvider = ({ children }) => {
     }
   };
 
+  // check if the user if already dislike thw video then show red dislike button
   const checkDislike = async (userId, videoId, setIsDisliked) => {
+    setMessage(null);
     if (!userId || !videoId) {
       return alert("Data not found");
     }
     try {
+      setMessage(null);
       const response = await axios.get(`${apiUrl}/getdislikevideo`, {
         params: { userId, videoId },
       });
       setIsDisliked(response.data);
     } catch (error) {
-      alert("Something went wrong " + error.message);
+      setMessage(error.message);
     }
   };
 
-  // watch later
-  const setWatchLaterVideo = async (userId, videoId) => {};
+  // set watch later videos
+  const setWatchLaterVideo = async (userId, videoId) => {
+    setMessage(null);
+    try {
+      await axios.post(`${apiUrl}/addwatchlater`, { userId, videoId });
+      setMessage(null);
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
+  // get watch later videos
+  const getWatchLaterVideo = async () => {
+    setMessage(null);
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      return setMessage("Please Login");
+    }
+
+    try {
+      const userResponse = await axios.get(`${apiUrl}/profile`, {
+        headers: { "auth-Token": token },
+      });
+      setUser(userResponse.data);
+      const userId = userResponse.data.user_id;
+      if (!userId) {
+        return setMessage("Please Login");
+      }
+
+      const response = await axios.get(`${apiUrl}/getwatchlater/${userId}`);
+      setWatchLater(response.data);
+    } catch (error) {
+      setMessage("Something went wrong while fetching your videos");
+      return;
+    }
+  };
+
+  const checkWatchLaterVideo = async (userId, videoId, checkWatchLater) => {
+    try {
+      const response = await axios.post(`${apiUrl}/checkWatchLaterVideo`, {
+        userId,
+        videoId,
+      });
+      checkWatchLater(response.data);
+    } catch (error) {
+      setMessage("Try again");
+    }
+  };
 
   return (
     <VideoContext.Provider
@@ -202,6 +256,10 @@ const VideoProvider = ({ children }) => {
         toggleVideoDislikeStatus,
         checkDislike,
         setWatchLaterVideo,
+        getWatchLaterVideo,
+        watchLater,
+        checkWatchLaterVideo,
+        alreadySet,
       }}
     >
       {children}

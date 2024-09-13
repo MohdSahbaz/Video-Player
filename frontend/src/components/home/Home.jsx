@@ -22,7 +22,7 @@ const Home = () => {
 
   return (
     <div className="text-white px-4 py-6 md:px-8 md:py-8">
-      {message && <p className="text-red-500 mb-4">{message}</p>}
+      {message && <p className="text-red-500 mb-4 text-center">{message}</p>}
       {videos.length === 0 ? (
         <p className="text-gray-500">No videos available.</p>
       ) : (

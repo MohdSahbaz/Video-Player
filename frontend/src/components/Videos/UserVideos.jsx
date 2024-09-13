@@ -27,7 +27,7 @@ const UserVideos = () => {
   return (
     <div className="text-white px-4 py-6 md:px-8 md:py-8">
       {message && <b className="text-red-500 text-center">{message}</b>}
-      <h1 className="text-2xl font-bold mb-4 md:text-3xl text-center">
+      <h1 className="text-xl font-bold mb-4 md:text-2xl text-center">
         {user.name} Videos
       </h1>
       <div className="flex flex-wrap gap-6 md:gap-8 justify-center items-start">

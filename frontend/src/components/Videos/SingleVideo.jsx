@@ -5,7 +5,6 @@ import { BiLike, BiSolidLike, BiDislike, BiSolidDislike } from "react-icons/bi";
 import { MdOutlinePlaylistAdd, MdOutlineWatchLater } from "react-icons/md";
 import { useContext, useEffect, useState } from "react";
 import { VideoContext } from "../../context/videosContext";
-import axios from "axios";
 
 export default function SingleVideo() {
   const [searchParams] = useSearchParams();
@@ -26,13 +25,14 @@ export default function SingleVideo() {
     setWatchLaterVideo,
     checkWatchLaterVideo,
   } = useContext(VideoContext);
+
   const [liked, setLiked] = useState(false); // to change the like state
   const [isLiked, setIsLiked] = useState(false); // check user is liked video or not
 
   const [disliked, setDisliked] = useState(false); // to change the dislike state
   const [isDisliked, setIsDisliked] = useState(false);
 
-  const [watchLater, setWatchLater] = useState(false); // to change the watchLater state
+  const [checkWatchLater, setCheckWatchLater] = useState(false); // to change the watchlater button state
   const [isWatchLater, setIsWatchLater] = useState(false);
 
   const [loading, setLoading] = useState(true);
@@ -65,7 +65,9 @@ export default function SingleVideo() {
 
   const handleWatchLater = async () => {
     await getUserId();
-    if (userId && videoId) {
+    if (userId) {
+      setIsWatchLater(!isWatchLater);
+      setWatchLaterVideo(userId, videoId);
     }
   };
 
@@ -78,6 +80,7 @@ export default function SingleVideo() {
           if (userId) {
             await checkLike(userId, videoId, setIsLiked);
             await checkDislike(userId, videoId, setIsDisliked);
+            await checkWatchLaterVideo(userId, videoId, setCheckWatchLater);
           }
         } catch (error) {
           console.error("Error fetching video:", error);
@@ -87,7 +90,7 @@ export default function SingleVideo() {
       }
     };
     fetchVideo();
-  }, [userId, videoId, liked, disliked]);
+  }, [userId, videoId, liked, disliked, isWatchLater]);
 
   const handleVisitUserProfile = (username) => {
     naviagte(`/${username}`);
@@ -166,16 +169,12 @@ export default function SingleVideo() {
             </div>
           </div>
           <div className="flex flex-nowrap">
-            <b className="flex justify-center items-center bg-slate-700/[0.5] hover:bg-slate-700/[1] cursor-pointer gap-2 px-4 py-1 border-r rounded-l-md">
-              <MdOutlinePlaylistAdd className="bg-transparent md:text-2xl text-xl" />
-              Playlist
-            </b>
             <b
               onClick={() => handleWatchLater()}
-              className="flex justify-center items-center bg-slate-700/[0.5] hover:bg-slate-700/[1] cursor-pointer gap-2 px-4 py-1 border-l rounded-r-md"
+              className="flex justify-center items-center bg-slate-700/[0.5] hover:bg-slate-700/[1] cursor-pointer gap-2 px-4 py-1 border rounded-sm"
             >
               <MdOutlineWatchLater className="bg-transparent md:text-2xl text-xl" />
-              Watch Later
+              {checkWatchLater ? "Remove" : "Save"}
             </b>
           </div>
           <div>

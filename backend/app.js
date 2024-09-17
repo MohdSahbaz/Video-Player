@@ -7,6 +7,7 @@ const videoRoutes = require("./routes/videos");
 const userAuthRoutes = require("./routes/userAuth");
 const passRoutes = require("./routes/forgetPassword");
 const userRoutes = require("./routes/user");
+const followRoutes = require("./routes/following");
 
 require("dotenv").config();
 
@@ -33,6 +34,9 @@ app.use("/api/password", passRoutes);
 
 // User routes
 app.use("/api", userRoutes);
+
+// Following Routes
+app.use("/api", followRoutes);
 
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => {

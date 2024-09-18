@@ -106,11 +106,13 @@ const checkFollow = async (req, res) => {
       return res.status(404).json({ error: "Followed user not found" });
     }
 
-    const follow = await Following.findOne({ follower_id, followed_id });
+    const follow = await Following.findOne({
+      where: { follower_id, followed_id },
+    });
     if (follow) {
-      res.status(200).json(true);
+      return res.status(200).json(true);
     } else {
-      res.status(200).json(false);
+      return res.status(200).json(false);
     }
   } catch (error) {
     res.status(500).json({ error: "An error occurred while checking follow" });

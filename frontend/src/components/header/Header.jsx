@@ -61,7 +61,7 @@ const Header = () => {
                   onClick={handleToggleMenu}
                 />
                 <SideBarLink
-                  to={"following"}
+                  to={"myfollowing"}
                   label={"Following"}
                   onClick={handleToggleMenu}
                 />

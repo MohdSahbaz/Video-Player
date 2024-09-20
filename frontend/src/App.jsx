@@ -42,7 +42,11 @@ const router = createBrowserRouter([
       {
         path: "",
         element: (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <div className="text-center text-red-600">Loading...</div>
+            }
+          >
             <Home />
           </Suspense>
         ),
@@ -50,7 +54,11 @@ const router = createBrowserRouter([
       {
         path: "trending",
         element: (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <div className="text-center text-red-600">Loading...</div>
+            }
+          >
             <Trending />
           </Suspense>
         ),
@@ -90,7 +98,11 @@ const router = createBrowserRouter([
       {
         path: "myvideo",
         element: (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <div className="text-center text-red-600">Loading...</div>
+            }
+          >
             <ProtectedRoute element={<UserVideos />} />
           </Suspense>
         ),
@@ -102,13 +114,17 @@ const router = createBrowserRouter([
       {
         path: "watchlater",
         element: (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <div className="text-center text-red-600">Loading...</div>
+            }
+          >
             <ProtectedRoute element={<WatchLater />} />
           </Suspense>
         ),
       },
       {
-        path: "following",
+        path: "myfollowing",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <ProtectedRoute element={<Followings />} />

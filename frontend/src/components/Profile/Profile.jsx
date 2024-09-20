@@ -43,7 +43,7 @@ const Profile = () => {
               </button>
               <button
                 className="px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600"
-                onClick={() => navigate("/following")}
+                onClick={() => navigate("/myfollowing")}
               >
                 {user.following} Following
               </button>

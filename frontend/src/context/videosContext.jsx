@@ -164,7 +164,7 @@ const VideoProvider = ({ children }) => {
         videoId,
       });
     } catch (error) {
-      alert("Please login " + error.message);
+      alert("Please login");
     }
   };
 

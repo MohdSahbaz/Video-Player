@@ -8,6 +8,7 @@ import { VideoProvider } from "./context/videosContext.jsx";
 import { AuthProvider } from "./context/auth/authContext.jsx";
 import { ForgetPasswordProvider } from "./context/auth/forgetPassword.jsx";
 import { UserProvider } from "./context/user.jsx";
+import { FollowProvider } from "./context/follow.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <ForgetPasswordProvider>
           <UserProvider>
-            <App />
+            <FollowProvider>
+              <App />
+            </FollowProvider>
           </UserProvider>
         </ForgetPasswordProvider>
       </AuthProvider>

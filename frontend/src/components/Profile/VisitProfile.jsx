@@ -33,13 +33,10 @@ const VisitProfile = () => {
           <div className="text-center flex flex-col justify-center">
             <b className="text-lg mb-2">{singleUser.name}</b>
             <div className="flex justify-center space-x-4 mt-4">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600">
+              <button className="px-4 py-2 bg-blue-500 text-white cursor-default rounded-md shadow">
                 {singleUser.followers} Followers
               </button>
-              <button
-                className="px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600"
-                onClick={() => navigate("/following")}
-              >
+              <button className="px-4 py-2 bg-green-500 cursor-default text-white rounded-md shadow">
                 {singleUser.following} Following
               </button>
               <button

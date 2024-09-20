@@ -54,14 +54,14 @@ const setFollow = async (req, res) => {
 
 // Get users that the follower is following
 const getFollow = async (req, res) => {
-  const { follower_id } = req.body;
+  const { follower_id } = req.params;
 
   if (!follower_id) {
     return res.status(400).json({ error: "user not found" });
   }
 
   try {
-    // Check if the follower user not exists
+    // Check if the follower user exists
     const checkFollowerUser = await User.findOne({
       where: { user_id: follower_id },
     });
@@ -70,9 +70,22 @@ const getFollow = async (req, res) => {
       return res.status(404).json({ error: "Follower user not found" });
     }
 
+    // Get the followings for the follower_id
     const followings = await Following.findAll({ where: { follower_id } });
-    res.status(200).json(followings);
+
+    // Extract the followed_ids from the followings array
+    const followedIds = followings.map((following) => following.followed_id);
+
+    if (followedIds.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    // Find users where their user_id matches any of the followedIds
+    const users = await User.findAll({ where: { user_id: followedIds } });
+
+    res.status(200).json(users);
   } catch (error) {
+    console.log("Error: " + error.message);
     res
       .status(500)
       .json({ error: "An error occurred while getting followings" });

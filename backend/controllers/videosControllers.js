@@ -327,7 +327,8 @@ const getWatchLaterVideos = async (req, res) => {
     });
 
     if (watchLaterVideos.length === 0) {
-      return res.status(404).json({ message: "No Videos in Watch Later" });
+      // return res.status(200).json({ message: "No Videos in Watch Later" });
+      return res.status(200).json([]);
     }
 
     // extract video IDs from watchLaterVideos

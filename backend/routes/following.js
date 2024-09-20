@@ -9,7 +9,7 @@ const {
 const router = express.Router();
 
 router.post("/setfollow", setFollow);
-router.get("/getfollow", getFollow);
+router.get("/getfollow/:follower_id", getFollow);
 router.post("/checkfollow", checkFollow);
 
 module.exports = router;
